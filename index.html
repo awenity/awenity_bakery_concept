@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Baking Studio | Premium Artisanal Bakery</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: {
+                            50: '#FDFBF7',
+                            100: '#F7F4EB',
+                            200: '#EFEAE0',
+                        },
+                        roseGold: {
+                            50: '#FDF6F6',
+                            100: '#FAEBEB',
+                            200: '#F3CDCD',
+                            500: '#D4A3A3',
+                            600: '#C58F8F',
+                            700: '#A76E6E',
+                        },
+                        charcoal: {
+                            800: '#2C2C2C',
+                            900: '#1A1A1A',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Sanity Client -->
+    <script src="https://unpkg.com/@sanity/client@6.15.2/dist/sanityClient.browser.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF7;
+            color: #2C2C2C;
+        }
+        .font-serif {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-roseGold-200">
+
+    <!-- Header / Navigation -->
+    <header class="sticky top-0 z-40 bg-cream-50/80 backdrop-blur-md border-b border-roseGold-100">
+        <div class="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
+            <a href="#" class="font-serif text-2xl tracking-wide text-charcoal-900 font-600">
+                THE BAKING <span class="italic text-roseGold-600 font-400">Studio</span>
+            </a>
+            <a href="#menu" class="hidden sm:flex items-center gap-2 text-sm font-medium tracking-wider uppercase text-charcoal-800 hover:text-roseGold-600 transition-colors">
+                <i data-lucide="cake" class="w-4 h-4"></i> View Menu
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <!-- Hero Section -->
+        <section class="relative bg-gradient-to-b from-cream-100 to-cream-50 py-20 px-4 text-center border-b border-roseGold-100/50">
+            <div class="max-w-3xl mx-auto space-y-6">
+                <span class="text-xs uppercase tracking-widest font-semibold text-roseGold-600 bg-roseGold-100 px-3 py-1 rounded-full">Artisanal & Custom</span>
+                <h1 class="font-serif text-4xl sm:text-6xl text-charcoal-900 leading-tight">
+                    Cakes crafted for life’s <span class="italic text-roseGold-600">sweetest moments</span>
+                </h1>
+                <p class="text-base sm:text-lg text-gray-600 max-w-xl mx-auto font-light leading-relaxed">
+                    Every creation is meticulously prepared using premium seasonal ingredients, tailored exactly to your aesthetic and palate.
+                </p>
+                <div class="pt-4">
+                    <a href="#menu" class="inline-flex items-center gap-3 bg-charcoal-900 text-cream-50 px-8 py-3.5 rounded-full text-sm font-medium tracking-wide shadow-xl hover:bg-roseGold-700 transition-all duration-300 transform hover:-translate-y-0.5">
+                        Browse the Menu
+                        <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Grid Section -->
+        <section id="menu" class="max-w-6xl mx-auto px-4 py-20">
+            <div class="mb-12 text-center sm:text-left">
+                <h2 class="font-serif text-3xl text-charcoal-900">Our Signature Menu</h2>
+                <p class="text-sm text-gray-500 mt-2">Select a foundation to customize or configure for your celebration.</p>
+            </div>
+
+            <!-- Products Container -->
+            <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Loading State placeholder -->
+                <div id="loading-state" class="col-span-full py-16 text-center space-y-4">
+                    <div class="animate-spin w-8 h-8 border-4 border-roseGold-500 border-t-transparent rounded-full mx-auto"></div>
+                    <p class="text-gray-500 text-sm italic font-serif">Curating the day's fresh bakes...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-cream-200 border-t border-roseGold-200 py-8 text-center text-xs text-gray-500 tracking-wide">
+        <p>&copy; 2026 The Baking Studio. Handcrafted Excellence.</p>
+    </footer>
+
+    <!-- Interactive Product Modal -->
+    <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-cream-50 rounded-2xl max-w-md w-full overflow-hidden shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]">
+            
+            <!-- Modal Header / Image Header -->
+            <div class="relative h-48 bg-cream-200 flex-shrink-0">
+                <img id="modal-image" src="" alt="" class="w-full h-full object-cover">
+                <button onclick="closeModal()" class="absolute top-4 right-4 bg-white/80 hover:bg-white text-charcoal-900 p-2 rounded-full backdrop-blur-sm transition-colors shadow-md">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- Modal Content (Scrollable if needed) -->
+            <div class="p-6 overflow-y-auto space-y-6">
+                <div>
+                    <h3 id="modal-title" class="font-serif text-2xl text-charcoal-900">Product Title</h3>
+                    <p id="modal-price" class="text-roseGold-700 font-medium mt-1">From $0.00</p>
+                </div>
+
+                <!-- Customization Options -->
+                <div class="space-y-4">
+                    <div>
+                        <label for="select-weight" class="block text-xs uppercase tracking-wider font-semibold text-gray-600 mb-2">Select Size / Weight</label>
+                        <div class="relative">
+                            <select id="select-weight" class="w-full bg-white border border-roseGold-200 rounded-xl px-4 py-3 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-roseGold-500/20 focus:border-roseGold-500 transition-all"></select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="select-flavor" class="block text-xs uppercase tracking-wider font-semibold text-gray-600 mb-2">Select Flavor Profile</label>
+                        <div class="relative">
+                            <select id="select-flavor" class="w-full bg-white border border-roseGold-200 rounded-xl px-4 py-3 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-roseGold-500/20 focus:border-roseGold-500 transition-all"></select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toast Notification inside modal context -->
+                <div id="modal-toast" class="hidden bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl p-3 flex items-start gap-2.5 animate-fadeIn">
+                    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5"></i>
+                    <div>
+                        <span class="font-semibold block">Order Details Copied!</span>
+                        Redirecting you to Instagram DMs to paste and confirm your booking.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Action Footer -->
+            <div class="p-6 bg-cream-100 border-t border-roseGold-100 flex-shrink-0">
+                <button onclick="handleCheckout()" class="w-full bg-charcoal-900 text-cream-50 py-3.5 rounded-xl text-sm font-medium tracking-wide hover:bg-roseGold-700 transition-colors shadow-lg flex items-center justify-center gap-2">
+                    <i data-lucide="instagram" class="w-4 h-4"></i>
+                    Copy Details & Order via DM
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Floating Toast for Custom Orders -->
+    <div id="global-toast" class="fixed bottom-6 right-6 z-50 bg-charcoal-900 text-cream-50 text-sm px-5 py-3.5 rounded-xl shadow-2xl flex items-center gap-3 translate-y-20 opacity-0 pointer-events-none transition-all duration-300 max-w-sm">
+        <i data-lucide="copy" class="w-4 h-4 text-roseGold-200 flex-shrink-0"></i>
+        <span>Text copied! Paste it into our Instagram DM window.</span>
+    </div>
+
+    <!-- Logic Script -->
+    <script>
+        // --- Sanity Configuration ---
+        const SANITY_CONFIG = {
+            projectId: 'f4pcjxo6',
+            dataset: 'production', // Default to production dataset
+            apiVersion: '2024-03-15', // Modern API version standard
+            useCdn: true
+        };
+
+        let client;
+        let activeProduct = null;
+
+        // Initialize Sanity Client safely
+        try {
+            client = window.SanityClient.createClient({
+                projectId: SANITY_CONFIG.projectId,
+                dataset: SANITY_CONFIG.dataset,
+                apiVersion: SANITY_CONFIG.apiVersion,
+                useCdn: SANITY_CONFIG.useCdn
+            });
+        } catch (error) {
+            console.error("Sanity Client failed to initialize", error);
+        }
+
+        // --- Content Lifecycle Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            fetchProducts();
+        });
+
+        // Fetch items from Sanity via GROQ
+        async function fetchProducts() {
+            const grid = document.getElementById('product-grid');
+            
+            // Comprehensive query selecting required variables and expanding image references
+            const query = `*[_type == "product"]{
+                _id,
+                title,
+                "imageUrl": image.asset->url,
+                basePrice,
+                weights,
+                flavors
+            }`;
+
+            try {
+                let products = [];
+                if (client && SANITY_CONFIG.projectId !== 'f4pcjxo6_placeholder') {
+                    products = await client.fetch(query);
+                }
+
+                // Remove loading spinner
+                document.getElementById('loading-state')?.remove();
+
+                if (!products || products.length === 0) {
+                    renderMockData(grid);
+                    return;
+                }
+
+                renderGrid(products, grid);
+            } catch (error) {
+                console.warn("Falling back to exquisite default collection due to fetch constraints.", error);
+                document.getElementById('loading-state')?.remove();
+                renderMockData(grid);
+            }
+        }
+
+        // Render functions for layout processing
+        function renderGrid(products, container) {
+            // Map products safely into markup templates
+            products.forEach(product => {
+                const card = createProductCard(product);
+                container.appendChild(card);
+            });
+
+            // Append static Custom Order Option Card right at the trailing end
+            container.appendChild(createCustomDesignCard());
+            lucide.createIcons();
+        }
+
+        function createProductCard(product) {
+            const div = document.createElement('div');
+            div.className = "bg-white border border-roseGold-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col group";
+            
+            // Standardizing placeholder images safely if sanity schema image fails asset matching
+            const imgUrl = product.imageUrl || 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=600';
+            const price = product.basePrice ? `$${product.basePrice.toFixed(2)}` : 'Contact for Price';
+
+            div.innerHTML = `
+                <div class="h-64 bg-cream-100 overflow-hidden relative">
+                    <img src="${imgUrl}" alt="${product.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                </div>
+                <div class="p-6 flex flex-col flex-grow justify-between space-y-4">
+                    <div class="space-y-1">
+                        <h3 class="font-serif text-xl text-charcoal-900">${product.title}</h3>
+                        <p class="text-sm font-medium text-roseGold-700">${price}</p>
+                    </div>
+                    <button class="w-full text-center border border-charcoal-800 text-charcoal-900 group-hover:bg-charcoal-900 group-hover:text-cream-50 py-3 rounded-xl text-sm font-medium tracking-wide transition-all duration-300">
+                        Order Now
+                    </button>
+                </div>
+            `;
+
+            // Setup programmatic interaction triggers passing state cleanly
+            div.querySelector('button').addEventListener('click', () => openModal(product));
+            return div;
+        }
+
+        function createCustomDesignCard() {
+            const div = document.createElement('div');
+            div.className = "bg-gradient-to-br from-cream-100 to-roseGold-100 border border-dashed border-roseGold-500/40 rounded-2xl p-8 flex flex-col justify-between items-center text-center cursor-pointer group hover:border-roseGold-500 transition-colors duration-300 min-h-[380px]";
+            div.innerHTML = `
+                <div class="my-auto space-y-4">
+                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto text-roseGold-600 shadow-sm group-hover:scale-110 transition-transform">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="font-serif text-2xl text-charcoal-900">Bespoke Creations</h3>
+                        <p class="text-sm text-gray-600 max-w-xs mx-auto leading-relaxed">
+                            Need a custom design or themed cake? Click here to send your reference photo.
+                        </p>
+                    </div>
+                </div>
+                <span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-roseGold-700 mt-4 group-hover:text-roseGold-900">
+                    Consult Designer <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                </span>
+            `;
+            div.addEventListener('click', handleCustomOrderRedirect);
+            return div;
+        }
+
+        // --- Interactive Modal Handling & Clipboard Controller ---
+        function openModal(product) {
+            activeProduct = product;
+            
+            const modal = document.getElementById('product-modal');
+            document.getElementById('modal-title').innerText = product.title;
+            document.getElementById('modal-price').innerText = product.basePrice ? `$${product.basePrice.toFixed(2)}` : 'Pricing variant';
+            document.getElementById('modal-image').src = product.imageUrl || 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=600';
+
+            // Populate option nodes
+            populateDropdown('select-weight', product.weights, ['6-inch / 1kg', '8-inch / 1.5kg', '10-inch / 2kg']);
+            populateDropdown('select-flavor', product.flavors, ['Classic Vanilla Bean', 'Rich Belgian Chocolate', 'Salted Caramel Praline']);
+
+            // Update internal indicators safely
+            lucide.createIcons();
+            document.getElementById('modal-toast').classList.add('hidden');
+
+            // Render visible states with clean animations
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.firstElementChild.classList.remove('scale-95');
+            modal.firstElementChild.classList.add('scale-100');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('product-modal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.firstElementChild.classList.remove('scale-100');
+            modal.firstElementChild.classList.add('scale-95');
+            activeProduct = null;
+        }
+
+        function populateDropdown(elementId, dataArray, fallbacks) {
+            const select = document.getElementById(elementId);
+            select.innerHTML = '';
+            
+            const activeOptions = (dataArray && dataArray.length > 0) ? dataArray : fallbacks;
+            
+            activeOptions.forEach(option => {
+                const node = document.createElement('option');
+                node.value = option;
+                node.innerText = option;
+                select.appendChild(node);
+            });
+        }
+
+        function handleCheckout() {
+            if (!activeProduct) return;
+
+            const selectedWeight = document.getElementById('select-weight').value;
+            const selectedFlavor = document.getElementById('select-flavor').value;
+
+            const textPayload = `Hi The Baking Studio! I would like to place an order:\n- Item: ${activeProduct.title}\n- Size/Weight: ${selectedWeight}\n- Flavor: ${selectedFlavor}`;
+
+            // Silent copy execution via core browser API
+            navigator.clipboard.writeText(textPayload).then(() => {
+                const toast = document.getElementById('modal-toast');
+                toast.classList.remove('hidden');
+
+                // Delayed redirect allows user processing time of current interface phase
+                setTimeout(() => {
+                    closeModal();
+                    window.open('https://www.instagram.com/', '_blank');
+                }, 1800);
+            }).catch(err => {
+                console.error('Could not extract clipboard control context:', err);
+                window.open('https://www.instagram.com/', '_blank');
+            });
+        }
+
+        function handleCustomOrderRedirect() {
+            const customText = "Hi The Baking Studio! I would like to inquire about designing a completely custom bespoke creation. I have reference photos ready to share!";
+            
+            navigator.clipboard.writeText(customText).then(() => {
+                const globalToast = document.getElementById('global-toast');
+                globalToast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+                
+                setTimeout(() => {
+                    globalToast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+                    window.open('https://www.instagram.com/', '_blank');
+                }, 2000);
+            });
+        }
+
+        // --- Mock Data Fallback Array ---
+        function renderMockData(grid) {
+            const defaults = [
+                {
+                    title: "Valrhona Chocolate Truffle Cake",
+                    imageUrl: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=600",
+                    basePrice: 65.00,
+                    weights: ["6-inch (Feeds 8-10)", "8-inch (Feeds 12-16)"],
+                    flavors: ["Dark Chocolate Ganache", "Espresso Infused Truffle"]
+                },
+                {
+                    title: "Pistachio Rose Celebration Cake",
+                    imageUrl: "https://images.unsplash.com/photo-1535141192574-5d4897c13636?auto=format&fit=crop&q=80&w=600",
+                    basePrice: 72.00,
+                    weights: ["6-inch (Feeds 8-10)", "8-inch (Feeds 12-16)"],
+                    flavors: ["Roasted Pistachio Cream", "Cardamom & Rosewater Infusion"]
+                },
+                {
+                    title: "Madagascar Vanilla & Raspberry Cake",
+                    imageUrl: "https://images.unsplash.com/photo-1464305795204-6f5bbfc7fb81?auto=format&fit=crop&q=80&w=600",
+                    basePrice: 58.00,
+                    weights: ["6-inch (Feeds 8-10)", "8-inch (Feeds 12-16)", "10-inch (Feeds 20+)"],
+                    flavors: ["Classic Vanilla Chiffon", "Meyer Lemon & Raspberry Curd"]
+                }
+            ];
+            renderGrid(defaults, grid);
+        }
+    </script>
+</body>
+</html>
