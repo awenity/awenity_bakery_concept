@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Baking Studio | Couture Patisserie & Management</title>
+    <title>The Baking Studio | Haute Patisserie</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -23,89 +23,84 @@
     <!-- Google Fonts & Lucide Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #FDFCF7; color: #262626; }
+        .luxury-gradient { background: linear-gradient(180deg, #F9F6EE 0%, #FDFCF7 100%); }
+    </style>
 </head>
-<body class="min-h-screen bg-cream-50 text-charcoal-900 font-sans antialiased selection:bg-roseGold-100">
+<body class="min-h-screen flex flex-col antialiased selection:bg-roseGold-100">
 
-    <!-- Premium Header Layout -->
+    <!-- Premium Header -->
     <header class="sticky top-0 z-40 bg-cream-50/80 backdrop-blur-xl border-b border-roseGold-100/60">
         <div class="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
             <div class="flex flex-col">
                 <a href="#" class="font-serif text-2xl tracking-widest text-charcoal-900 font-600 uppercase">
                     The Baking <span class="italic text-roseGold-600 font-400 lowercase">Studio</span>
                 </a>
-                <span class="text-[9px] uppercase tracking-[0.3em] text-gray-400 -mt-0.5">Haute Pâtisserie & Management</span>
+                <span class="text-[9px] uppercase tracking-[0.3em] text-gray-400 -mt-0.5">Haute Pâtisserie Ateliers</span>
             </div>
             
-            <div class="flex items-center gap-6">
-                <!-- Session Context Interface Triggers -->
-                <div id="auth-status-container" class="text-xs font-medium tracking-wider text-charcoal-800">
-                    <!-- Loaded dynamically via active session checks -->
-                </div>
+            <div class="flex items-center gap-4">
+                <div id="auth-status-container" class="text-xs font-medium tracking-wider text-charcoal-800 flex items-center gap-2"></div>
                 <button onclick="toggleAuthModal()" id="auth-gate-btn" class="border border-charcoal-900 px-4 py-2 rounded-xl text-xs font-semibold tracking-wider uppercase hover:bg-cream-100 transition-colors">
-                    Login / Register
+                    Sign In
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Master Layout Main Container Block -->
     <main class="max-w-7xl mx-auto px-6 py-12 flex-grow">
-        
-        <!-- Standard E-Commerce Client Layout Showcase Layer -->
+        <!-- Client Menu View Component -->
         <div id="client-view-pane" class="space-y-16">
-            <!-- Hero Component Segment -->
-            <section class="text-center py-16 bg-cream-100 rounded-3xl border border-roseGold-100/40 px-4">
+            <section class="text-center py-20 bg-cream-100 rounded-3xl border border-roseGold-100/40 px-4">
                 <h1 class="font-serif text-4xl sm:text-6xl text-charcoal-900 font-500 tracking-tight mb-4">
-                    Architectural Cakes Crafted for <br><span class="italic text-roseGold-600 font-400">Sweet Precision</span>
+                    Cakes Crafted with <br><span class="italic text-roseGold-600 font-400">Couture Precision</span>
                 </h1>
-                <p class="text-xs text-gray-500 max-w-md mx-auto tracking-wide mb-6">Lahore & Karachi Premium Custom Ordaining Pipeline System.</p>
-                <a href="#menu-anchor" class="bg-charcoal-900 text-cream-50 px-8 py-3.5 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-roseGold-700 transition-colors">Explore Editorial Menu</a>
+                <p class="text-xs text-gray-500 max-w-md mx-auto tracking-wide mb-6">Lahore & Karachi Private Confectionery Commissions.</p>
+                <a href="#menu-anchor" class="bg-charcoal-900 text-cream-50 px-8 py-3.5 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-roseGold-700 transition-colors">View Seasonal Collection</a>
             </section>
 
-            <!-- Menu Framework -->
             <section id="menu-anchor" class="space-y-8">
-                <h2 class="font-serif text-3xl text-charcoal-900 font-500 text-center">Signature Foundations</h2>
+                <h2 class="font-serif text-3xl text-charcoal-900 font-500 text-center">Our Custom Formulations</h2>
                 <div id="product-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="col-span-full text-center text-xs tracking-widest text-gray-400 py-12 animate-pulse">Establishing Live Sanity Pipelines...</div>
+                    <div class="col-span-full text-center text-xs tracking-widest text-gray-400 py-12 animate-pulse">Presenting the current menu...</div>
                 </div>
             </section>
         </div>
 
-        <!-- Administrative Core Control Center Dashboard Interface Layer -->
+        <!-- Administrative Dashboard View Component -->
         <div id="admin-view-pane" class="hidden space-y-8">
             <div class="flex items-center justify-between border-b border-roseGold-200 pb-6">
                 <div>
-                    <h2 class="font-serif text-3xl text-charcoal-900 font-500">Atelier Control Console</h2>
-                    <p class="text-xs text-gray-500">Manage order pipelines, log payments, and track client delivery coordinates.</p>
+                    <h2 class="font-serif text-3xl text-charcoal-900 font-500">Atelier Order Manager</h2>
+                    <p class="text-xs text-gray-500">Approve incoming reservations, verify transactions, and coordinate deliveries.</p>
                 </div>
-                <button onclick="logoutSession()" class="bg-red-600 text-white px-4 py-2 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-red-700 transition-colors">
-                    Exit Console
+                <button onclick="logoutSession()" class="bg-charcoal-900 text-white px-5 py-2.5 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-roseGold-700 transition-colors">
+                    Exit Management View
                 </button>
             </div>
 
             <div class="bg-white border border-roseGold-200 rounded-2xl overflow-hidden shadow-sm">
                 <div class="p-6 bg-cream-100 border-b border-roseGold-100 flex justify-between items-center">
-                    <h3 class="text-xs uppercase font-bold tracking-wider text-charcoal-900">Active Order Logs</h3>
+                    <h3 class="text-xs uppercase font-bold tracking-wider text-charcoal-900">Current Order Registry</h3>
                     <button onclick="loadAdminDashboard()" class="text-xs font-medium text-roseGold-700 hover:underline flex items-center gap-1">
-                        <i data-lucide="refresh-cw" class="w-3 h-3"></i> Refresh Workspace Data
+                        <i data-lucide="refresh-cw" class="w-3 h-3"></i> Refresh Orders List
                     </button>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs">
                         <thead>
                             <tr class="bg-cream-50 border-b border-roseGold-100 text-[10px] uppercase font-bold tracking-wider text-gray-500">
-                                <th class="p-4">Ticket ID</th>
-                                <th class="p-4">Client Detail</th>
-                                <th class="p-4">Configuration</th>
-                                <th class="p-4">Delivery Coordinates</th>
-                                <th class="p-4">Pipeline Status</th>
-                                <th class="p-4 text-right">Actions</th>
+                                <th class="p-4">Ticket</th>
+                                <th class="p-4">Guest Details</th>
+                                <th class="p-4">Bake Selection</th>
+                                <th class="p-4">Delivery Window</th>
+                                <th class="p-4">Status</th>
+                                <th class="p-4 text-right">Update Order</th>
                             </tr>
                         </thead>
                         <tbody id="admin-orders-table-body">
-                            <tr>
-                                <td colspan="6" class="p-8 text-center italic text-gray-400">Loading incoming pipeline entries...</td>
-                            </tr>
+                            <tr><td colspan="6" class="p-8 text-center italic text-gray-400">Loading order logs...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -113,144 +108,170 @@
         </div>
     </main>
 
-    <!-- Interactive Product Checkout Customization Configuration Modal -->
+    <!-- Interactive Checkout Dialog -->
     <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/60 backdrop-blur-md hidden">
-        <div class="bg-cream-50 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-roseGold-200/50 flex flex-col max-h-[90vh]">
+        <div class="bg-cream-50 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-roseGold-200 flex flex-col max-h-[90vh]">
             <div class="p-6 border-b border-roseGold-100 flex justify-between items-center bg-cream-100">
-                <h3 id="modal-title" class="font-serif text-xl font-semibold">Configure Selection</h3>
+                <h3 id="modal-title" class="font-serif text-xl font-semibold">Customize Cake Options</h3>
                 <button onclick="closeModal()" class="text-charcoal-900 hover:opacity-50"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             
             <div class="p-6 overflow-y-auto space-y-4 text-xs">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block font-bold text-gray-500 mb-1">Serving Volume / Weight</label>
-                        <select id="select-weight" class="w-full bg-white border border-roseGold-200 rounded-xl p-3"></select>
+                        <label class="block font-bold text-gray-500 mb-1">Cake Weight Scale</label>
+                        <select id="select-weight" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none"></select>
                     </div>
                     <div>
-                        <label class="block font-bold text-gray-500 mb-1">Flavor Profiles</label>
-                        <select id="select-flavor" class="w-full bg-white border border-roseGold-200 rounded-xl p-3"></select>
+                        <label class="block font-bold text-gray-500 mb-1">Composed Flavor Combinations</label>
+                        <select id="select-flavor" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none"></select>
                     </div>
                 </div>
 
                 <div class="h-px bg-roseGold-100 my-2"></div>
-                <h4 class="font-bold uppercase tracking-wider text-roseGold-700">Delivery Information</h4>
+                <h4 class="font-bold uppercase tracking-wider text-roseGold-700">Delivery Distribution Parameters</h4>
                 
                 <div class="space-y-3">
                     <div>
                         <label class="block text-gray-500 mb-1">Requested Delivery Date *</label>
-                        <input type="date" id="order-delivery-date" class="w-full bg-white border border-roseGold-200 rounded-xl p-3">
+                        <input type="date" id="order-delivery-date" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-gray-500 mb-1">Recipient Name *</label>
-                        <input type="text" id="order-recipient-name" class="w-full bg-white border border-roseGold-200 rounded-xl p-3" placeholder="e.g., Zainab Ahmed">
+                        <input type="text" id="order-recipient-name" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-gray-500 mb-1">WhatsApp / Contact Number *</label>
-                        <input type="tel" id="order-contact-number" class="w-full bg-white border border-roseGold-200 rounded-xl p-3" placeholder="e.g., 03001234567">
+                        <label class="block text-gray-500 mb-1">WhatsApp Mobile *</label>
+                        <input type="tel" id="order-contact-number" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-gray-500 mb-1">Full Delivery Address Coordinates *</label>
-                        <textarea id="order-address" rows="2" class="w-full bg-white border border-roseGold-200 rounded-xl p-3" placeholder="House/Apartment, Street Address, Sector/Area Name"></textarea>
+                        <label class="block text-gray-500 mb-1">Complete Delivery Address *</label>
+                        <textarea id="order-address" rows="2" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none" placeholder="Street Name, House Number, City Area"></textarea>
                     </div>
                 </div>
             </div>
 
-            <div class="p-6 bg-cream-100 border-t border-roseGold-100 flex gap-4">
-                <button onclick="submitOrderPipeline()" class="w-full bg-charcoal-900 text-cream-50 py-3.5 rounded-xl font-semibold tracking-wider uppercase hover:bg-roseGold-700 transition-colors">
-                    Lock Custom Order Specifications
+            <div class="p-6 bg-cream-100 border-t border-roseGold-100">
+                <button id="checkout-submit-btn" onclick="submitOrderPipeline()" class="w-full bg-charcoal-900 text-cream-50 py-3.5 rounded-xl font-semibold tracking-wider uppercase hover:bg-roseGold-700 transition-colors disabled:opacity-50">
+                    Confirm Order Reservation
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Ticket Validation Showcase Receipt UI Modal -->
+    <!-- Payment Receipt Instructions Modal -->
     <div id="receipt-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/60 backdrop-blur-md hidden">
-        <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border-2 border-roseGold-200 p-8 text-center space-y-6">
-            <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-sm">
-                <i data-lucide="receipt" class="w-8 h-8"></i>
+        <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border border-roseGold-200 p-8 text-center space-y-6">
+            <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-sm">
+                <i data-lucide="receipt" class="w-6 h-6"></i>
             </div>
-            <div class="space-y-2">
-                <span class="text-[10px] uppercase font-bold text-roseGold-600 tracking-widest">Atelier Booking Issued</span>
-                <h3 class="font-serif text-2xl text-charcoal-900 font-500">Order Locked Successfully</h3>
-                <div class="bg-cream-100 p-3 rounded-xl inline-block font-mono text-base font-bold text-charcoal-900 border border-roseGold-200" id="receipt-ticket-label">TICKETID</div>
+            <div class="space-y-1">
+                <span class="text-[10px] uppercase font-bold text-roseGold-600 tracking-widest">Order Logged Successfully</span>
+                <h3 class="font-serif text-2xl text-charcoal-900">Your Unique Invoice Ticket</h3>
+                <div class="bg-cream-100 px-4 py-2 rounded-xl inline-block font-mono text-base font-bold text-charcoal-900 border border-roseGold-200 mt-2" id="receipt-ticket-label">---</div>
             </div>
 
-            <div class="bg-cream-50 rounded-2xl p-4 text-left border border-roseGold-100 text-xs space-y-3">
-                <p class="font-bold text-charcoal-900 text-center uppercase tracking-wide border-b border-roseGold-200 pb-2">JazzCash Payment Routing Instruction</p>
-                <p class="flex items-center justify-between"><span>Target Channel:</span> <strong class="text-charcoal-900">JazzCash Wallet</strong></p>
-                <p class="flex items-center justify-between"><span>Account Number:</span> <strong class="text-roseGold-700 font-mono text-sm">03001311047</strong></p>
-                <div class="text-[10px] text-gray-500 leading-relaxed bg-white border p-2.5 rounded-xl border-roseGold-100/60">
-                    ⚠️ Please route exact balance value via your dashboard. Once complete, document a clear screenshot capture and dispatch it directly alongside your ticket system code to our validation hotline channel link underneath.
+            <div class="bg-cream-50 rounded-2xl p-4 text-left border border-roseGold-100 text-xs space-y-2.5">
+                <p class="font-bold text-charcoal-900 text-center uppercase tracking-wide border-b border-roseGold-200 pb-1.5">JazzCash Retailing Accounts</p>
+                <p class="flex justify-between"><span>Payment Option:</span> <strong>JazzCash Wallet</strong></p>
+                <p class="flex justify-between"><span>Account Number:</span> <strong class="text-roseGold-700 font-mono text-sm">03001311047</strong></p>
+                <div class="text-[10px] text-gray-400 leading-relaxed bg-white border p-3 rounded-xl border-roseGold-100">
+                    Kindly complete your transfer via JazzCash. Screenshot the confirmation receipt image, then dispatch it via the custom shortcut launcher down below.
                 </div>
             </div>
 
             <button onclick="dispatchWhatsAppReceipt()" class="w-full bg-emerald-600 text-white py-4 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-emerald-700 transition-all flex items-center justify-center gap-2">
-                <i data-lucide="send" class="w-4 h-4"></i> Dispatch Screenshot Verification
+                <i data-lucide="send" class="w-4 h-4"></i> Send Screenshot to WhatsApp
             </button>
         </div>
     </div>
 
-    <!-- Authentication Central Gateway Overlay Component -->
+    <!-- Account Details Settings Dialog -->
+    <div id="settings-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/60 backdrop-blur-md hidden">
+        <div class="bg-cream-50 rounded-2xl max-w-md w-full overflow-hidden shadow-2xl border border-roseGold-200 p-6 space-y-4">
+            <div class="flex justify-between items-center border-b border-roseGold-100 pb-3">
+                <h3 class="font-serif text-lg font-semibold">Modify Account Settings</h3>
+                <button onclick="toggleSettingsModal()" class="text-charcoal-900 opacity-50"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-gray-500 mb-1">Full Identity Name</label>
+                    <input type="text" id="settings-fullname" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-500 mb-1">Primary WhatsApp Mobile</label>
+                    <input type="tel" id="settings-phone" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-gray-500 mb-1">Persistent Delivery Address</label>
+                    <textarea id="settings-address" rows="3" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none"></textarea>
+                </div>
+                <button id="settings-save-btn" onclick="saveAccountSettings()" class="w-full bg-charcoal-900 text-cream-50 py-3 rounded-xl text-xs font-semibold tracking-wider uppercase hover:bg-roseGold-700 transition-colors">
+                    Save Updates
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Authentication Dialog Component -->
     <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/60 backdrop-blur-md hidden">
         <div class="bg-cream-50 rounded-2xl max-w-md w-full overflow-hidden shadow-2xl border border-roseGold-200 p-6 space-y-4">
             <div class="flex justify-between items-center border-b border-roseGold-100 pb-3">
-                <h3 class="font-serif text-lg font-semibold" id="auth-modal-title">Access Profile Gateway</h3>
+                <h3 class="font-serif text-lg font-semibold" id="auth-modal-title">Access Atelier Profile</h3>
                 <button onclick="toggleAuthModal()" class="text-charcoal-900 opacity-50"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             
             <div class="space-y-3 text-xs">
                 <div>
-                    <label class="block font-bold text-gray-500 mb-1">Username Identifier Token</label>
-                    <input type="text" id="auth-username" class="w-full bg-white border border-roseGold-200 rounded-xl p-3" placeholder="Enter username...">
+                    <label class="block font-bold text-gray-500 mb-1">Account Username</label>
+                    <input type="text" id="auth-username" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none">
                 </div>
                 <div>
-                    <label class="block font-bold text-gray-500 mb-1">Secure Password Phrase</label>
-                    <input type="password" id="auth-password" class="w-full bg-white border border-roseGold-200 rounded-xl p-3" placeholder="Enter password...">
+                    <label class="block font-bold text-gray-500 mb-1">Password Credentials</label>
+                    <input type="password" id="auth-password" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none">
                 </div>
                 
                 <div id="auth-extended-fields" class="hidden space-y-3">
                     <div>
-                        <label class="block font-bold text-gray-500 mb-1">Your Full Identity Name</label>
-                        <input type="text" id="auth-fullname" class="w-full bg-white border border-roseGold-200 rounded-xl p-3" placeholder="e.g., Muhammad Saqib">
+                        <label class="block font-bold text-gray-500 mb-1">Full Display Identity Name</label>
+                        <input type="text" id="auth-fullname" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none" placeholder="Saqib Zahid">
                     </div>
                     <div>
-                        <label class="block font-bold text-gray-500 mb-1">Default Delivery Address Coordinates</label>
-                        <textarea id="auth-address" rows="2" class="w-full bg-white border border-roseGold-200 rounded-xl p-3" placeholder="Saved profile coordinates..."></textarea>
+                        <label class="block font-bold text-gray-500 mb-1">Primary WhatsApp Contact</label>
+                        <input type="tel" id="auth-phone" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none" placeholder="03001311047">
                     </div>
                     <div>
-                        <label class="block font-bold text-gray-500 mb-1">Primary WhatsApp Mobile</label>
-                        <input type="tel" id="auth-phone" class="w-full bg-white border border-roseGold-200 rounded-xl p-3" placeholder="e.g., 03001234567">
+                        <label class="block font-bold text-gray-500 mb-1">Delivery Address Coordinate Defaults</label>
+                        <textarea id="auth-address" rows="2" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none"></textarea>
                     </div>
                 </div>
 
                 <div class="pt-2 flex flex-col gap-2">
                     <button onclick="processAuthSubmission()" class="w-full bg-charcoal-900 text-cream-50 py-3 rounded-xl text-xs font-semibold tracking-wider uppercase hover:bg-roseGold-700 transition-colors">
-                        Confirm Selection Action
+                        Continue
                     </button>
                     <button onclick="toggleAuthMode()" id="auth-toggle-mode-btn" class="w-full text-center text-roseGold-700 font-medium hover:underline pt-1 text-[11px]">
-                        Don't have an profile card? Register Account
+                        Create an Atelier Account Card
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- System Feedback Toast -->
+    <!-- Alert Toast Feedback Widget -->
     <div id="global-toast" class="fixed bottom-6 right-6 z-50 bg-charcoal-900 text-cream-50 text-xs font-medium tracking-widest uppercase px-6 py-4 rounded-xl shadow-2xl opacity-0 translate-y-10 transition-all duration-300 pointer-events-none">
-        Feedback Logged.
+        System Action Validated.
     </div>
 
-    <!-- System Core Engine Scripts Module Processing -->
+    <!-- Application Script Engine Routing Modules -->
     <script type="module">
         import { createClient } from 'https://esm.sh/@sanity/client@6.15.0';
 
-        // Core dynamic client instantiation credentials context tracking properties
         const SANITY_CONFIG = {
             projectId: 't7g7grwf',
             dataset: 'production',
             apiVersion: '2026-07-11',
-            useCdn: false // CDN deactivated to guarantee immediate availability of newly added orders inside the dashboard
+            useCdn: false
         };
 
         const client = createClient({
@@ -258,28 +279,74 @@
             dataset: SANITY_CONFIG.dataset,
             apiVersion: SANITY_CONFIG.apiVersion,
             useCdn: SANITY_CONFIG.useCdn,
-            // ⚠️ SECURITY NOTE: For complete standalone functionality within a single HTML document file,
-            // we configure a write token directly to authorize runtime account creations and order generation.
-            token: 'skPYKACGDVnR4lWBudDjZDhDqpHtBIaGXmCYhMnGOdZLhcrpRi8OhX7XyrJwMiEQ3gp9PkodijfH2qmiL4cqE7QXnUnu4diaMHXV4EY2mvQt044vkE98vj2CcKtPHyt0EwgSsELfABMKbxBX1SpaRMAs6KJY55IRFE8ktRMtXI69L4jGcOw0' 
+            token: 'skPYKACGDVnR4lWBudDjZDhDqpHtBIaGXmCYhMnGOdZLhcrpRi8OhX7XyrJwMiEQ3gp9PkodijfH2qmiL4cqE7QXnUnu4diaMHXV4EY2mvQt044vkE98vj2CcKtPHyt0EwgSsELfABMKbxBX1SpaRMAs6KJY55IRFE8ktRMtXI69L4jGcOw0'
         });
 
-        // Store Session Arrays Data Mapping Fields
         let cachedUserSession = null;
         let activeProductContext = null;
         let isRegisterMode = false;
         let newlyGeneratedTicketCache = "";
 
-        // Application Setup Pipeline Initialization
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             loadEditorialMenu();
             checkLocalSessionState();
         });
 
-        // --- Authentication Logic & Identity Verification System ---
+        // --- Profile Account Control Settings System Functions ---
+        window.toggleSettingsModal = function() {
+            const modal = document.getElementById('settings-modal');
+            if(modal.classList.contains('hidden')) {
+                document.getElementById('settings-fullname').value = cachedUserSession.fullName || '';
+                document.getElementById('settings-phone').value = cachedUserSession.savedPhone || '';
+                document.getElementById('settings-address').value = cachedUserSession.savedAddress || '';
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        };
+
+        window.saveAccountSettings = async function() {
+            const name = document.getElementById('settings-fullname').value.trim();
+            const phone = document.getElementById('settings-phone').value.trim();
+            const address = document.getElementById('settings-address').value.trim();
+            const saveBtn = document.getElementById('settings-save-btn');
+
+            if(!name) {
+                triggerNotificationToast("Identity name parameters required.");
+                return;
+            }
+
+            saveBtn.disabled = true;
+            saveBtn.innerText = "Saving Profile Configurations...";
+
+            try {
+                // Update properties inside Sanity architecture records directly
+                await client.patch(cachedUserSession._id)
+                    .set({ fullName: name, savedPhone: phone, savedAddress: address })
+                    .commit();
+
+                // Mutate local temporary state session structures asynchronously
+                cachedUserSession.fullName = name;
+                cachedUserSession.savedPhone = phone;
+                cachedUserSession.savedAddress = address;
+                localStorage.setItem('studio_session', JSON.stringify(cachedUserSession));
+
+                executeSessionUIRendering();
+                window.toggleSettingsModal();
+                triggerNotificationToast("Account parameters updated cleanly.");
+            } catch(e) {
+                console.error(e);
+                triggerNotificationToast("Failed to serialize account modifications.");
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.innerText = "Save Updates";
+            }
+        };
+
+        // --- Identity Authorization Gateway Portal Controller ---
         window.toggleAuthModal = function() {
-            const modal = document.getElementById('auth-modal');
-            modal.classList.toggle('hidden');
+            document.getElementById('auth-modal').classList.toggle('hidden');
         };
 
         window.toggleAuthMode = function() {
@@ -289,13 +356,13 @@
             const toggleBtn = document.getElementById('auth-toggle-mode-btn');
 
             if (isRegisterMode) {
-                title.innerText = "Register Atelier Account Card";
+                title.innerText = "Create Atelier Account Card";
                 extendedFields.classList.remove('hidden');
-                toggleBtn.innerText = "Already registered? Return to Login Profile";
+                toggleBtn.innerText = "Return to Profile Sign In";
             } else {
-                title.innerText = "Access Profile Gateway";
+                title.innerText = "Access Atelier Profile";
                 extendedFields.classList.add('hidden');
-                toggleBtn.innerText = "Don't have an profile card? Register Account";
+                toggleBtn.innerText = "Create an Atelier Account Card";
             }
         };
 
@@ -304,71 +371,63 @@
             const passIn = document.getElementById('auth-password').value.trim();
 
             if(!userIn || !passIn) {
-                triggerNotificationToast("Complete required credential text parameters.");
+                triggerNotificationToast("Complete credential verification parameters.");
                 return;
             }
 
-            // Hardcoded Admin Override Intercept Loop Pipeline Execution
             if(userIn === 'admin' && passIn === 'admin') {
                 cachedUserSession = { username: 'admin', fullName: 'Lead Atelier Administrator', isAdmin: true };
                 localStorage.setItem('studio_session', JSON.stringify(cachedUserSession));
                 executeSessionUIRendering();
-                toggleAuthModal();
-                triggerNotificationToast("Console administration active.");
+                window.toggleAuthModal();
+                triggerNotificationToast("Management console active.");
                 return;
             }
 
             if(isRegisterMode) {
                 const nameIn = document.getElementById('auth-fullname').value.trim();
-                const addressIn = document.getElementById('auth-address').value.trim();
                 const phoneIn = document.getElementById('auth-phone').value.trim();
+                const addressIn = document.getElementById('auth-address').value.trim();
 
                 try {
-                    // Check if identifier token unique value already allocated
                     const checkExist = await client.fetch(`*[_type == "studioUser" && username == $usr][0]`, { usr: userIn });
                     if(checkExist) {
-                        triggerNotificationToast("Username identifier token variant already taken.");
+                        triggerNotificationToast("Username selection variant token already allocated.");
                         return;
                     }
 
-                    const newUserDoc = {
+                    const createdUser = await client.create({
                         _type: 'studioUser',
                         username: userIn,
                         password: passIn,
                         fullName: nameIn || userIn,
-                        savedAddress: addressIn || '',
                         savedPhone: phoneIn || '',
+                        savedAddress: addressIn || '',
                         isAdmin: false
-                    };
+                    });
 
-                    await client.create(newUserDoc);
-                    triggerNotificationToast("Account card issued successfully! Logging in...");
-                    
-                    cachedUserSession = newUserDoc;
+                    triggerNotificationToast("Card profile activated.");
+                    cachedUserSession = createdUser;
                     localStorage.setItem('studio_session', JSON.stringify(cachedUserSession));
                     executeSessionUIRendering();
-                    toggleAuthModal();
+                    window.toggleAuthModal();
                 } catch (err) {
-                    console.error("Account write exception response:", err);
-                    triggerNotificationToast("Cloud vault synchronization failure response.");
+                    triggerNotificationToast("Registration error encountered.");
                 }
             } else {
-                // Login Flow Execution Validation Pipeline Loop
                 try {
                     const matchedUser = await client.fetch(`*[_type == "studioUser" && username == $usr && password == $pwd][0]`, { usr: userIn, pwd: passIn });
-                    
                     if(!matchedUser) {
                         triggerNotificationToast("Invalid configuration credentials verification match.");
                         return;
                     }
-
                     cachedUserSession = matchedUser;
                     localStorage.setItem('studio_session', JSON.stringify(cachedUserSession));
                     executeSessionUIRendering();
-                    toggleAuthModal();
+                    window.toggleAuthModal();
                     triggerNotificationToast("Welcome back to the studio.");
                 } catch(e) {
-                    triggerNotificationToast("Profile synchronization authorization error.");
+                    triggerNotificationToast("Profile tracking lookup server error.");
                 }
             }
         };
@@ -398,9 +457,9 @@
                 gateBtn.classList.add('hidden');
                 statusBox.innerHTML = `
                     <div class="flex items-center gap-3">
-                        <span class="bg-roseGold-100 px-3 py-1.5 rounded-full text-[11px] font-semibold text-charcoal-900 border border-roseGold-200">
+                        <button onclick="${cachedUserSession.isAdmin ? 'void(0)' : 'window.toggleSettingsModal()'}" class="bg-roseGold-100 px-3 py-1.5 rounded-full text-[11px] font-semibold text-charcoal-900 border border-roseGold-200 hover:bg-roseGold-200/40 transition-colors">
                             ✨ ${cachedUserSession.fullName} ${cachedUserSession.isAdmin ? '(Admin)' : ''}
-                        </span>
+                        </button>
                         ${!cachedUserSession.isAdmin ? `<button onclick="logoutSession()" class="text-roseGold-700 hover:underline text-[11px] font-semibold">Sign Out</button>` : ''}
                     </div>
                 `;
@@ -422,7 +481,7 @@
             lucide.createIcons();
         }
 
-        // --- Storefront Menu Presentation Framework ---
+        // --- Storefront Menu Presentation Layers ---
         async function loadEditorialMenu() {
             const grid = document.getElementById('product-grid');
             const query = `*[_type == "product"]{ _id, title, image, basePrice, weights, flavors }`;
@@ -432,7 +491,7 @@
                 grid.innerHTML = '';
 
                 if(!bakes || bakes.length === 0) {
-                    grid.innerHTML = `<div class="col-span-full py-12 border-2 border-dashed border-roseGold-200 rounded-2xl text-center text-xs text-gray-400">Atelier product schemas database currently contains zero entries.</div>`;
+                    grid.innerHTML = `<div class="col-span-full py-12 border border-dashed border-roseGold-200 rounded-2xl text-center text-xs text-gray-400">Atelier menu tracking system is currently empty.</div>`;
                     return;
                 }
 
@@ -463,31 +522,25 @@
                     grid.appendChild(card);
                 });
             } catch(e) {
-                console.error(e);
-                grid.innerHTML = `<div class="col-span-full text-center text-xs text-red-700">Database communication interface fault. Check console pipelines.</div>`;
+                grid.innerHTML = `<div class="col-span-full text-center text-xs text-red-700 py-12">Database communication interface fault. Check server logs.</div>`;
             }
         }
 
         function openOrderModal(bake, imageUrl) {
             activeProductContext = { ...bake, imageUrl };
-            const modal = document.getElementById('product-modal');
-            
             document.getElementById('modal-title').innerText = bake.title;
             populateDropdownOpts('select-weight', bake.weights, ['2 Lbs (Standard Single Tier)', '4 Lbs (Two Tier)', '6 Lbs (Grand Festive Tier)']);
             populateDropdownOpts('select-flavor', bake.flavors, ['Belgian Chocolate Fudge', 'Silk Route Salted Caramel', 'Lotus Biscoff Crunch']);
 
-            // If user logged in, pull persistent coordinate cache properties automatically
             if(cachedUserSession && !cachedUserSession.isAdmin) {
                 document.getElementById('order-recipient-name').value = cachedUserSession.fullName || '';
                 document.getElementById('order-contact-number').value = cachedUserSession.savedPhone || '';
                 document.getElementById('order-address').value = cachedUserSession.savedAddress || '';
-            } else {
-                document.getElementById('order-recipient-name').value = '';
-                document.getElementById('order-contact-number').value = '';
-                document.getElementById('order-address').value = '';
             }
-
-            modal.classList.remove('hidden');
+            
+            document.getElementById('checkout-submit-btn').disabled = false;
+            document.getElementById('checkout-submit-btn').innerText = "Confirm Order Reservation";
+            document.getElementById('product-modal').classList.remove('hidden');
         }
 
         window.closeModal = function() {
@@ -496,8 +549,7 @@
         };
 
         function populateDropdownOpts(id, arr, fallbacks) {
-            const el = document.getElementById(id);
-            el.innerHTML = '';
+            const el = document.getElementById(id); el.innerHTML = '';
             const opts = (arr && arr.length > 0) ? arr : fallbacks;
             opts.forEach(o => {
                 const opt = document.createElement('option');
@@ -505,64 +557,63 @@
             });
         }
 
-        // --- Ticket Operations & Chronological Order Generation Pipeline ---
+        // --- Ticket Processing & Optimization Handshake Pipelines ---
         window.submitOrderPipeline = async function() {
             const dateIn = document.getElementById('order-delivery-date').value;
             const nameIn = document.getElementById('order-recipient-name').value.trim();
             const phoneIn = document.getElementById('order-contact-number').value.trim();
             const addrIn = document.getElementById('order-address').value.trim();
+            const submitBtn = document.getElementById('checkout-submit-btn');
 
             if(!dateIn || !nameIn || !phoneIn || !addrIn) {
                 triggerNotificationToast("Complete all required coordinate delivery parameters.");
                 return;
             }
 
-            // 1. Generate Ticket Code Chronologically Sequence Matcher Loop
+            // Lock submission node context arrays dynamically to eliminate multi clicks
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Securing Booking Order Tiers...";
+
             const timeObj = new Date();
             const d = String(timeObj.getDate()).padStart(2, '0');
             const m = String(timeObj.getMonth() + 1).padStart(2, '0');
             const y = String(timeObj.getFullYear()).slice(-2);
-            const datePrefix = `${d}${m}${y}`; // Format: DDMMYY
+            const datePrefix = `${d}${m}${y}`; 
 
             let uniqueSequenceCode = "001";
             try {
-                // Fetch daily document tracking arrays count metrics matching standard system patterns
                 const matchCount = await client.fetch(`count(*[_type == "order" && ticketId match $prefix])`, { prefix: `${datePrefix}*` });
                 uniqueSequenceCode = String(matchCount + 1).padStart(3, '0');
             } catch(err) {
-                console.warn("Chronological sorting count failure context tracking code:", err);
+                console.warn(err);
             }
 
             const ticketId = `${datePrefix}${uniqueSequenceCode}`;
             newlyGeneratedTicketCache = ticketId;
 
-            // 2. Build and push the Order Document to Sanity
-            const orderDocument = {
-                _type: 'order',
-                ticketId: ticketId,
-                customerName: nameIn,
-                usernameRef: (cachedUserSession && !cachedUserSession.isAdmin) ? cachedUserSession.username : 'Guest',
-                cakeTitle: activeProductContext.title,
-                weight: document.getElementById('select-weight').value,
-                flavor: document.getElementById('select-flavor').value,
-                deliveryDate: dateIn,
-                deliveryAddress: addrIn,
-                contactNumber: phoneIn,
-                status: 'Pending Payment Verification'
-            };
-
             try {
-                await client.create(orderDocument);
+                await client.create({
+                    _type: 'order',
+                    ticketId: ticketId,
+                    customerName: nameIn,
+                    usernameRef: (cachedUserSession && !cachedUserSession.isAdmin) ? cachedUserSession.username : 'Guest',
+                    cakeTitle: activeProductContext.title,
+                    weight: document.getElementById('select-weight').value,
+                    flavor: document.getElementById('select-flavor').value,
+                    deliveryDate: dateIn,
+                    deliveryAddress: addrIn,
+                    contactNumber: phoneIn,
+                    status: 'Pending Payment Verification'
+                });
                 
-                // Hide custom options config layer display receipt verification parameters modal
                 document.getElementById('product-modal').classList.add('hidden');
                 document.getElementById('receipt-ticket-label').innerText = ticketId;
                 document.getElementById('receipt-modal').classList.remove('hidden');
-                
-                triggerNotificationToast("Atelier allocation booking locked.");
+                triggerNotificationToast("Atelier booking reservation allocated.");
             } catch(e) {
-                console.error(e);
-                triggerNotificationToast("Cloud vault ordering handshake failure exception.");
+                triggerNotificationToast(" হ্যান্ডশেক API transaction creation vault failure.");
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Confirm Order Reservation";
             }
         };
 
@@ -584,19 +635,17 @@
             window.closeModal();
         };
 
-        // --- Administrative Core Console Automation Functions ---
+        // --- Administrative Management Logic Operations ---
         async function loadAdminDashboard() {
             const tableBody = document.getElementById('admin-orders-table-body');
-            tableBody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-xs animate-pulse tracking-widest text-gray-400">Syncing live cloud orders...</td></tr>`;
-
-            const orderQuery = `*[_type == "order"] | order(_createdAt desc)`;
+            tableBody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-xs tracking-widest text-gray-400 animate-pulse">Syncing order repository registries...</td></tr>`;
 
             try {
-                const logs = await client.fetch(orderQuery);
+                const logs = await client.fetch(`*[_type == "order"] | order(_createdAt desc)`);
                 tableBody.innerHTML = '';
 
                 if(!logs || logs.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="6" class="p-8 text-center italic text-gray-400">No client orders present in the database.</td></tr>`;
+                    tableBody.innerHTML = `<tr><td colspan="6" class="p-8 text-center italic text-gray-400">No active bookings registered.</td></tr>`;
                     return;
                 }
 
@@ -604,36 +653,31 @@
                     const row = document.createElement('tr');
                     row.className = "border-b border-roseGold-100 hover:bg-cream-100/50 transition-colors";
                     
-                    let statusBadgeClass = "bg-amber-50 text-amber-700 border-amber-200";
-                    if(log.status === 'Payment Confirmed') statusBadgeClass = "bg-blue-50 text-blue-700 border-blue-200";
-                    if(log.status === 'Baking In Progress') statusBadgeClass = "bg-purple-50 text-purple-700 border-purple-200";
-                    if(log.status === 'Declined/Refunded') statusBadgeClass = "bg-red-50 text-red-700 border-red-200";
+                    let badgeClass = "bg-amber-50 text-amber-700 border-amber-200";
+                    if(log.status === 'Payment Confirmed') badgeClass = "bg-blue-50 text-blue-700 border-blue-200";
+                    if(log.status === 'Baking In Progress') badgeClass = "bg-purple-50 text-purple-700 border-purple-200";
+                    if(log.status === 'Declined/Refunded') badgeClass = "bg-red-50 text-red-700 border-red-200";
 
                     row.innerHTML = `
                         <td class="p-4 font-mono font-bold text-charcoal-900">${log.ticketId}</td>
                         <td class="p-4">
                             <div class="font-semibold">${log.customerName}</div>
-                            <div class="text-[10px] text-gray-400">WhatsApp: ${log.contactNumber}</div>
-                            <div class="text-[10px] text-roseGold-700">User Token: ${log.usernameRef}</div>
+                            <div class="text-[10px] text-gray-400">Mobile: ${log.contactNumber}</div>
                         </td>
                         <td class="p-4">
                             <div class="font-medium text-charcoal-900">${log.cakeTitle}</div>
                             <div class="text-[10px] text-gray-400">${log.weight} / ${log.flavor}</div>
                         </td>
                         <td class="p-4">
-                            <div class="max-w-xs truncate" title="${log.deliveryAddress}">${log.deliveryAddress}</div>
-                            <div class="text-[10px] font-semibold text-charcoal-800 mt-0.5">Due Date: ${log.deliveryDate}</div>
+                            <div class="max-w-xs truncate">${log.deliveryAddress}</div>
+                            <div class="text-[10px] font-semibold text-charcoal-800 mt-0.5">Delivery Target: ${log.deliveryDate}</div>
                         </td>
-                        <td class="p-4">
-                            <span class="px-2.5 py-1 border rounded-full text-[10px] font-semibold tracking-wide ${statusBadgeClass}">
-                                ${log.status}
-                            </span>
-                        </td>
-                        <td class="p-4 text-right space-y-1">
+                        <td class="p-4"><span class="px-2.5 py-1 border rounded-full text-[10px] font-semibold tracking-wide ${badgeClass}">${log.status}</span></td>
+                        <td class="p-4 text-right">
                             <div class="flex items-center justify-end gap-1.5">
-                                <button onclick="window.updateOrderStatus('${log._id}', 'Payment Confirmed')" class="bg-charcoal-900 text-white p-1.5 rounded hover:bg-roseGold-700 transition-colors" title="Confirm Receipt Payment"><i data-lucide="check" class="w-3.5 h-3.5"></i></button>
-                                <button onclick="window.updateOrderStatus('${log._id}', 'Baking In Progress')" class="bg-cream-200 text-charcoal-900 p-1.5 rounded hover:bg-roseGold-200 transition-colors" title="Move to Baking Queue"><i data-lucide="cake" class="w-3.5 h-3.5"></i></button>
-                                <button onclick="window.updateOrderStatus('${log._id}', 'Declined/Refunded')" class="bg-red-50 border border-red-200 text-red-700 p-1.5 rounded hover:bg-red-600 hover:text-white transition-colors" title="Decline Transaction"><i data-lucide="slash" class="w-3.5 h-3.5"></i></button>
+                                <button onclick="window.updateOrderStatus('${log._id}', 'Payment Confirmed')" class="bg-charcoal-900 text-white p-1.5 rounded hover:bg-roseGold-700 transition-colors"><i data-lucide="check" class="w-3.5 h-3.5"></i></button>
+                                <button onclick="window.updateOrderStatus('${log._id}', 'Baking In Progress')" class="bg-cream-200 text-charcoal-900 p-1.5 rounded hover:bg-roseGold-200 transition-colors"><i data-lucide="cake" class="w-3.5 h-3.5"></i></button>
+                                <button onclick="window.updateOrderStatus('${log._id}', 'Declined/Refunded')" class="bg-red-50 border border-red-200 text-red-700 p-1.5 rounded hover:bg-red-600 hover:text-white transition-colors"><i data-lucide="slash" class="w-3.5 h-3.5"></i></button>
                             </div>
                         </td>
                     `;
@@ -641,30 +685,28 @@
                 });
                 lucide.createIcons();
             } catch(err) {
-                console.error(err);
-                tableBody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-700 font-semibold">Console sync crash exception logged.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-700 font-semibold">Workspace context execution configuration failure.</td></tr>`;
             }
         }
 
-        window.updateOrderStatus = async function(id, targetStatus) {
+        window.updateOrderStatus = async function(id, status) {
             try {
-                await client.patch(id).set({ status: targetStatus }).commit();
-                triggerNotificationToast(`Ticket modified: ${targetStatus}`);
+                await client.patch(id).set({ status }).commit();
+                triggerNotificationToast(`Order Status Mutated.`);
                 loadAdminDashboard();
             } catch(e) {
-                triggerNotificationToast("Failed to mutate operational ticket status parameters.");
+                triggerNotificationToast("Failed status change updates.");
             }
         };
 
-        // --- Global Helper Notification System ---
         function triggerNotificationToast(message) {
             const toast = document.getElementById('global-toast');
             toast.innerText = message;
-            toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
-            toast.classList.add('opacity-100', 'translate-y-0');
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateY(0)';
             setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
-                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
             }, 3000);
         }
     </script>
