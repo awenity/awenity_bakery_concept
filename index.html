@@ -25,6 +25,7 @@
             }
         }
     </script>
+    
     <!-- Google Fonts & Lucide Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -35,10 +36,9 @@
         window.OneSignalDeferred = window.OneSignalDeferred || [];
         OneSignalDeferred.push(async function(OneSignal) {
             await OneSignal.init({
-                appId: "YOUR-ONESIGNAL-APP-ID", // 👈 Replace with your OneSignal web app ID token key string
+                appId: "YOUR-ONESIGNAL-APP-ID", 
                 allowLocalhostAsSecureContext: true
             });
-            // Automatically prompts the user for push notifications once the page initializes
             OneSignal.Notifications.requestPermission();
         });
     </script>
@@ -54,6 +54,24 @@
     </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-roseGold-100">
+
+    <!-- Premium Native PWA Top Installation Promotion Banner Bar -->
+    <div id="top-pwa-install-banner" class="hidden w-full bg-gradient-to-r from-charcoal-900 to-charcoal-800 text-cream-50 text-xs py-3.5 px-6 flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-roseGold-700/20 shadow-md">
+        <div class="flex items-center gap-3 text-center sm:text-left">
+            <i data-lucide="smartphone" class="w-4 h-4 text-roseGold-200 hidden sm:block flex-shrink-0 animate-bounce"></i>
+            <p class="tracking-wide font-medium">
+                To easily track your order live anytime, install <span class="font-serif italic text-roseGold-200">The Baking Studio app</span> on your device homescreen.
+            </p>
+        </div>
+        <div class="flex items-center gap-4">
+            <button id="top-pwa-native-install-btn" class="bg-cream-50 text-charcoal-900 px-4 py-1.5 rounded-lg font-bold text-[10px] uppercase tracking-wider hover:bg-roseGold-50 transition-colors shadow-sm whitespace-nowrap">
+                Install App
+            </button>
+            <button onclick="dismissTopInstallBanner()" class="text-white/40 hover:text-white transition-colors" aria-label="Dismiss banner">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
 
     <!-- Push Notification Overlay Banner -->
     <div id="live-notification-banner" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-charcoal-900 border border-roseGold-500/30 text-cream-50 text-xs font-medium tracking-widest uppercase px-8 py-4 rounded-xl shadow-2xl flex items-center gap-4 transition-all duration-500 opacity-0 translate-y-[-50px] pointer-events-none max-w-md w-full">
@@ -103,7 +121,7 @@
             </section>
         </div>
 
-        <!-- Administrative Dashboard View Component -->
+        <!-- High-End Administrative Dashboard Order Card Grid Component -->
         <div id="admin-view-pane" class="hidden space-y-8">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-roseGold-200 pb-6">
                 <div>
@@ -324,18 +342,6 @@
             </div>
             
             <div class="space-y-3 text-xs">
-                <!-- Native PWA Installation Hook Controller Element -->
-                <div id="pwa-install-banner-block" class="hidden bg-gradient-to-br from-cream-100 to-roseGold-50 border border-roseGold-300 p-4 rounded-xl flex items-center justify-between gap-4">
-                    <div class="flex items-center gap-2.5 text-left">
-                        <i data-lucide="smartphone" class="w-5 h-5 text-roseGold-600 flex-shrink-0"></i>
-                        <div>
-                            <span class="font-bold block text-charcoal-900 text-[11px]">Install Studio Application</span>
-                            <span class="text-gray-500 text-[10px]">Add this boutique catalog system right to your home screen.</span>
-                        </div>
-                    </div>
-                    <button id="pwa-native-install-btn" class="bg-charcoal-900 hover:bg-roseGold-700 text-white px-4 py-2 rounded-lg font-bold tracking-wider uppercase text-[10px] shadow-sm transition-colors flex-shrink-0">Install</button>
-                </div>
-
                 <div id="auth-main-inputs">
                     <div>
                         <label class="block font-bold text-gray-500 mb-1">Account Username</label>
@@ -392,7 +398,7 @@
     <script type="module">
         import { createClient } from 'https://esm.sh/@sanity/client@6.15.0';
 
-        // 1. Core Service Worker Registration Block for PWA functionality
+        // Core Service Worker Registration Block for PWA functionality
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('OneSignalSDKWorker.js', { scope: '/awenity_bakery_concept/' })
@@ -423,13 +429,13 @@
         let newlyGeneratedTicketCache = "";
         let adminSubscriptionHook = null;
         let existingTicketsRegistryCache = []; 
-        let interceptedPWAInstallPrompt = null; // Installs deferred installation triggers cleanly
+        let interceptedPWAInstallPrompt = null; 
 
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             loadEditorialMenu();
             checkLocalSessionState();
-            setupPWABeforeInstallListener(); // Setup custom system install captures immediately
+            setupPWABeforeInstallListener(); 
         });
 
         // --- PWA Custom App Installation Intercept Logic Loops ---
@@ -439,22 +445,30 @@
                 e.preventDefault();
                 interceptedPWAInstallPrompt = e;
                 
-                // Expose our hidden luxury system installation element
-                const banner = document.getElementById('pwa-install-banner-block');
+                // Expose our hidden luxury system installation element banner
+                const banner = document.getElementById('top-pwa-install-banner');
                 if (banner) {
                     banner.classList.remove('hidden');
+                    banner.classList.add('flex');
                 }
 
-                document.getElementById('pwa-native-install-btn').onclick = async () => {
+                document.getElementById('top-pwa-native-install-btn').onclick = async () => {
                     if (!interceptedPWAInstallPrompt) return;
                     banner.classList.add('hidden');
-                    interceptedPWAInstallPrompt.prompt(); // Show browser overlay
+                    banner.classList.remove('flex');
+                    interceptedPWAInstallPrompt.prompt(); // Show browser install overlay natively
                     const result = await interceptedPWAInstallPrompt.userChoice;
-                    console.log(`User interaction results state resolution: ${result.outcome}`);
+                    console.log(`User interaction choice resolution: ${result.outcome}`);
                     interceptedPWAInstallPrompt = null;
                 };
             });
         }
+
+        window.dismissTopInstallBanner = function() {
+            const banner = document.getElementById('top-pwa-install-banner');
+            banner.classList.add('hidden');
+            banner.classList.remove('flex');
+        };
 
         // --- Profile Account Control Settings System Functions ---
         window.toggleSettingsModal = function() {
@@ -1029,7 +1043,7 @@
             }
         }
 
-        // --- Admin Inspect Overlay Modal Function Management ---
+        // --- Deep Admin Inspect Overlay Modal Function Management ---
         window.openInspectModal = function(log) {
             const modal = document.getElementById('admin-inspect-modal');
             
