@@ -1,6 +1,6 @@
 {
-  "short_name": "BakingStudio",
   "name": "The Baking Studio Ateliers",
+  "short_name": "BakingStudio",
   "description": "Premium Custom Confectionery Commissions Boutique Portal.",
   "start_url": "./index.html",
   "scope": "./",

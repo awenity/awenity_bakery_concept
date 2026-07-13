@@ -38,7 +38,10 @@
         OneSignalDeferred.push(async function(OneSignal) {
             await OneSignal.init({
                 appId: "YOUR-ONESIGNAL-APP-ID", 
-                allowLocalhostAsSecureContext: true
+                allowLocalhostAsSecureContext: true,
+                // ⚠️ Crucial Fix: Instruct OneSignal to run inside your custom sw.js file
+                serviceWorkerPath: "sw.js", 
+                serviceWorkerParam: { scope: "./" }
             });
             OneSignal.Notifications.requestPermission();
         });
@@ -58,7 +61,7 @@
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-roseGold-100">
 
-    <!-- Optional Premium Native PWA Top Installation Promotion Banner Bar -->
+    <!-- Non-Intrusive Optional PWA Installation Header Bar -->
     <div id="top-pwa-install-banner" class="hidden w-full bg-gradient-to-r from-charcoal-900 to-charcoal-800 text-cream-50 text-xs py-3.5 px-6 flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-roseGold-700/20 shadow-md">
         <div class="flex items-center gap-3 text-center sm:text-left">
             <i data-lucide="smartphone" class="w-4 h-4 text-roseGold-200 hidden sm:block flex-shrink-0 animate-bounce"></i>
@@ -185,7 +188,7 @@
                     </div>
                     <div>
                         <label class="block text-gray-500 mb-1">Recipient Name *</label>
-                        <input type="text" id="order-recipient-name" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none">
+                        <input type="text" id="order-delivery-date" name="recipient" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-gray-500 mb-1">WhatsApp Mobile *</label>
@@ -241,7 +244,7 @@
                 </div>
             </div>
 
-            <button onclick="dispatchWhatsAppReceipt()" class="w-full bg-emerald-600 text-white py-3.5 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-emerald-700 transition-all flex items-center justify-center gap-2">
+            <button onclick="dispatchWhatsAppReceipt()" class="w-full bg-emerald-600 text-white py-3.5 rounded-xl text-xs font-semibold tracking-wider uppercase hover:bg-emerald-700 transition-all flex items-center justify-center gap-2">
                 <i data-lucide="send" class="w-4 h-4"></i> Copy & Go to WhatsApp
             </button>
         </div>
@@ -295,7 +298,7 @@
         </div>
     </div>
 
-    <!-- Extended Account Details Drawer -->
+    <!-- Extended Account Details & Live Tracking Status Panel Drawer -->
     <div id="settings-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/60 backdrop-blur-md hidden">
         <div class="bg-cream-50 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-roseGold-200 flex flex-col max-h-[92vh]">
             <div class="p-5 border-b border-roseGold-100 flex justify-between items-center bg-cream-100">
@@ -326,6 +329,7 @@
                     </button>
                 </div>
 
+                <!-- Live Client Tracking System Pipeline History Area -->
                 <div class="space-y-3">
                     <h4 class="font-bold uppercase tracking-wider text-charcoal-900 text-[10px] flex items-center gap-1.5">
                         <i data-lucide="clock" class="w-3.5 h-3.5 text-roseGold-600"></i> Track My Placed Orders
@@ -401,11 +405,11 @@
     <script type="module">
         import { createClient } from 'https://esm.sh/@sanity/client@6.15.0';
 
-        // 1. Core Service Worker Registration Block using Relative Subfolder Parameters
+        // 1. Core Service Worker Registration Block for PWA functionality
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./OneSignalSDKWorker.js', { scope: './' })
-                    .then(reg => console.log('Service worker tracking active scope:', reg.scope))
+                navigator.serviceWorker.register('./sw.js', { scope: './' })
+                    .then(reg => console.log('PWA Service worker active under scope:', reg.scope))
                     .catch(err => console.error('PWA service worker deployment exception:', err));
             });
         }
@@ -447,7 +451,6 @@
                 e.preventDefault();
                 interceptedPWAInstallPrompt = e;
                 
-                // Expose our hidden luxury system installation element banner at the top
                 const banner = document.getElementById('top-pwa-install-banner');
                 if (banner) {
                     banner.classList.remove('hidden');
@@ -863,7 +866,7 @@
             });
         }
 
-        // --- Ticket Processing & Optimization Handshake Pipelines ---
+        // --- Ticket Processing & Handshake Pipelines ---
         window.submitOrderPipeline = async function() {
             const dateIn = document.getElementById('order-delivery-date').value;
             const nameIn = document.getElementById('order-recipient-name').value.trim();
@@ -1044,7 +1047,7 @@
             }
         }
 
-        // --- Deep Admin Inspect Overlay Modal Function Management ---
+        // --- Admin Inspect Overlay Modal Function Management ---
         window.openInspectModal = function(log) {
             const modal = document.getElementById('admin-inspect-modal');
             
