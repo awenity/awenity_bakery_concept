@@ -339,7 +339,7 @@
     <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/60 backdrop-blur-md hidden">
         <div class="bg-cream-50 rounded-2xl max-w-md w-full overflow-hidden shadow-2xl border border-roseGold-200 p-6 space-y-4">
             <div class="flex justify-between items-center border-b border-roseGold-100 pb-2">
-                <h3 class="font-serif text-base font-semibold" id="auth-modal-title">Customer Account Log In</h3>
+                <h3 class="font-serif text-base font-semibold" id="auth-modal-title">Sign In</h3>
                 <button onclick="toggleAuthModal()" class="text-charcoal-900 opacity-50"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             
@@ -375,7 +375,7 @@
                         Continue
                     </button>
                     <button onclick="toggleAuthMode()" id="auth-toggle-mode-btn" class="w-full text-center text-roseGold-700 font-medium hover:underline pt-1 text-[11px]">
-                        Create an Account
+                        Create a New Account
                     </button>
                 </div>
             </div>
@@ -458,7 +458,6 @@
             setTimeout(() => lucide.createIcons(), 50);
         };
 
-        // Payment recovery trigger mapping function
         window.relaunchPaymentRecovery = function(ticketId, title, weight, flavor, finalPrice) {
             newlyGeneratedTicketCache = ticketId;
             finalCalculatedPriceCache = Number(finalPrice) || 0;
@@ -543,7 +542,7 @@
                 executeSessionUIRendering(); window.toggleSettingsModal(); triggerNotificationToast("Account data successfully updated.");
             } catch(e) {
                 triggerNotificationToast("Serialization error.");
-            } block {
+            } finally {
                 saveBtn.disabled = false; saveBtn.innerText = "Update Account Details";
             }
         };
@@ -557,32 +556,38 @@
             isRegisterMode = !isRegisterMode;
             const title = document.getElementById('auth-modal-title'), extendedFields = document.getElementById('auth-extended-fields'), toggleBtn = document.getElementById('auth-toggle-mode-btn');
             if (isRegisterMode) {
-                title.innerText = "Create an Account"; extendedFields.classList.remove('hidden'); toggleBtn.innerText = "Return to Log In";
+                title.innerText = "Create a New Account"; extendedFields.classList.remove('hidden'); toggleBtn.innerText = "Return to Log In";
             } else {
-                title.innerText = "Customer Account Log In"; extendedFields.classList.add('hidden'); toggleBtn.innerText = "Create an Account";
+                title.innerText = "Sign In"; extendedFields.classList.add('hidden'); toggleBtn.innerText = "Create a New Account";
             }
         };
 
         window.processAuthSubmission = async function() {
             const userIn = document.getElementById('auth-username').value.trim();
             const passIn = document.getElementById('auth-password').value.trim();
-            if(!userIn || !passIn) { triggerNotificationToast("Complete all verification parameters."); return; }
+            const submitBtn = document.getElementById('auth-submit-main-btn');
+
+            if(!userIn || !passIn) { triggerNotificationToast("Complete all fields."); return; }
+
+            // Freeze button immediately to prevent duplicate account creation
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Please wait...";
 
             if(isRegisterMode) {
                 const nameIn = document.getElementById('auth-fullname').value.trim(), phoneIn = document.getElementById('auth-phone').value.trim(), addressIn = document.getElementById('auth-address').value.trim();
                 try {
                     const checkExist = await client.fetch(`*[_type == "studioUser" && username == $usr][0]`, { usr: userIn });
-                    if(checkExist) { triggerNotificationToast("Username variant already allocated."); return; }
+                    if(checkExist) { triggerNotificationToast("Username already taken."); submitBtn.disabled = false; submitBtn.innerText = "Continue"; return; }
                     const createdUser = await client.create({ _type: 'studioUser', username: userIn, password: passIn, fullName: nameIn || userIn, savedPhone: phoneIn || '', savedAddress: addressIn || '', isAdmin: false });
-                    triggerNotificationToast("Profile successfully generated."); cachedUserSession = createdUser; localStorage.setItem('studio_session', JSON.stringify(cachedUserSession)); executeSessionUIRendering(); window.toggleAuthModal();
-                } catch (err) { triggerNotificationToast("Registration fault."); }
+                    triggerNotificationToast("Account created successfully."); cachedUserSession = createdUser; localStorage.setItem('studio_session', JSON.stringify(cachedUserSession)); executeSessionUIRendering(); window.toggleAuthModal();
+                } catch (err) { triggerNotificationToast("Registration error."); submitBtn.disabled = false; submitBtn.innerText = "Continue"; }
             } else {
                 try {
                     const matchedUser = await client.fetch(`*[_type == "studioUser" && username == $usr && password == $pwd][0]`, { usr: userIn, pwd: passIn });
-                    if(!matchedUser) { triggerNotificationToast("Invalid credentials."); return; }
+                    if(!matchedUser) { triggerNotificationToast("Invalid credentials."); submitBtn.disabled = false; submitBtn.innerText = "Continue"; return; }
                     cachedUserSession = matchedUser; localStorage.setItem('studio_session', JSON.stringify(cachedUserSession)); executeSessionUIRendering(); window.toggleAuthModal();
-                    if(matchedUser.isAdmin) triggerNotificationToast("Admin mode enabled."); else triggerNotificationToast("Profile unlocked.");
-                } catch(e) { triggerNotificationToast("Sync failure."); }
+                    if(matchedUser.isAdmin) triggerNotificationToast("Admin mode enabled."); else triggerNotificationToast("Signed in successfully.");
+                } catch(e) { triggerNotificationToast("Connection error."); submitBtn.disabled = false; submitBtn.innerText = "Continue"; }
             }
         };
 
@@ -682,16 +687,15 @@
 
             let localActiveSession = cachedUserSession;
 
-            // Forced inline runtime user creation if not authenticated
             if(!localActiveSession) {
                 const userIn = document.getElementById('order-username').value.trim();
                 const passIn = document.getElementById('order-password').value.trim();
-                if(!userIn || !passIn) { triggerNotificationToast("Account parameters are required to place an order."); return; }
+                if(!userIn || !passIn) { triggerNotificationToast("Account details are required to place an order."); return; }
 
                 submitBtn.disabled = true; submitBtn.innerText = "Creating Account Profile...";
                 try {
                     const checkExist = await client.fetch(`*[_type == "studioUser" && username == $usr][0]`, { usr: userIn });
-                    if(checkExist) { triggerNotificationToast("Username token variant already allocated."); submitBtn.disabled = false; submitBtn.innerText = "Place Your Order"; return; }
+                    if(checkExist) { triggerNotificationToast("Username already taken."); submitBtn.disabled = false; submitBtn.innerText = "Place Your Order"; return; }
                     
                     localActiveSession = await client.create({ 
                         _type: 'studioUser', 
