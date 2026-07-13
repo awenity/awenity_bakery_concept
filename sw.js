@@ -2,7 +2,7 @@
 importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
 
 // 2. Configure PWA Asset Caching Architecture
-const CACHE_NAME = 'baking-studio-cache-v5';
+const CACHE_NAME = 'baking-studio-cache-v6';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
