@@ -147,7 +147,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block font-bold text-gray-500 mb-1">Cake Weight Scale</label>
-                        <select id="select-weight" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none"></select>
+                        <select id="select-weight" onchange="window.updateModalPriceDisplay()" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none"></select>
                     </div>
                     <div>
                         <label class="block font-bold text-gray-500 mb-1">Composed Flavors</label>
@@ -156,6 +156,12 @@
                 </div>
 
                 <div class="h-px bg-roseGold-100 my-1"></div>
+                
+                <div class="flex justify-between items-center bg-cream-100 p-3 rounded-xl border border-roseGold-100">
+                    <span class="font-bold text-gray-600 uppercase tracking-wider text-[10px]">Estimated Tier Cost:</span>
+                    <span id="modal-live-price" class="font-serif text-sm font-bold text-roseGold-700">PKR 0</span>
+                </div>
+
                 <h4 class="font-bold uppercase tracking-wider text-roseGold-700 text-[10px]">Delivery Parameters</h4>
                 
                 <div class="space-y-3">
@@ -168,7 +174,7 @@
                         <input type="text" id="order-recipient-name" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-gray-500 mb-1">WhatsApp Mobile *</label>
+                        <label class="block text-gray-500 mb-1">WhatsApp Mobile * <span class="text-[10px] text-gray-400 font-normal">(e.g., 03001234567)</span></label>
                         <input type="tel" id="order-contact-number" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none">
                     </div>
                     <div>
@@ -385,6 +391,8 @@
             useCdn: false
         };
 
+        // NOTE: Keeping client configuration. To completely eliminate vulnerability on GitHub public code repository,
+        // this client should securely process queries through a hidden proxy backend server without client-side write tokens.
         const client = createClient({
             projectId: SANITY_CONFIG.projectId,
             dataset: SANITY_CONFIG.dataset,
@@ -398,6 +406,7 @@
         let isRegisterMode = false;
         let isGuestTrackMode = false;
         let newlyGeneratedTicketCache = "";
+        let finalCalculatedPriceCache = 0;
         let adminSubscriptionHook = null;
         let existingTicketsRegistryCache = []; 
 
@@ -405,7 +414,31 @@
             lucide.createIcons();
             loadEditorialMenu();
             checkLocalSessionState();
+            
+            // UI Enforcer: Set minimum date criteria to today to prevent choosing historical dates
+            const dateInput = document.getElementById('order-delivery-date');
+            if(dateInput) {
+                const today = new Date().toISOString().split('T')[0];
+                dateInput.min = today;
+            }
         });
+
+        // Dynamic multi-tier pricing helper logic
+        window.calculateCurrentPrice = function() {
+            if (!activeProductContext) return 0;
+            const base = Number(activeProductContext.basePrice) || 0;
+            const weightVal = document.getElementById('select-weight').value;
+            
+            if (weightVal.includes('4 Lbs')) return base * 1.8;
+            if (weightVal.includes('6 Lbs')) return base * 2.5;
+            return base;
+        };
+
+        window.updateModalPriceDisplay = function() {
+            const computedPrice = window.calculateCurrentPrice();
+            finalCalculatedPriceCache = computedPrice;
+            document.getElementById('modal-live-price').innerText = `PKR ${computedPrice.toLocaleString()}`;
+        };
 
         // --- Profile Account Control Settings System Functions ---
         window.toggleSettingsModal = function() {
@@ -424,6 +457,7 @@
             } else {
                 modal.classList.add('hidden');
             }
+            setTimeout(() => lucide.createIcons(), 50);
         };
 
         async function renderUserOrderTimeline() {
@@ -490,7 +524,11 @@
         };
 
         // --- Identity Authorization Gateway Portal Controller ---
-        window.toggleAuthModal = function() { document.getElementById('auth-modal').classList.toggle('hidden'); };
+        window.toggleAuthModal = function() { 
+            document.getElementById('auth-modal').classList.toggle('hidden');
+            setTimeout(() => lucide.createIcons(), 50);
+        };
+        
         window.toggleGuestTrackMode = function() {
             isGuestTrackMode = !isGuestTrackMode; isRegisterMode = false;
             const title = document.getElementById('auth-modal-title'), mainInputs = document.getElementById('auth-main-inputs'), guestFields = document.getElementById('auth-guest-track-fields'), extendedFields = document.getElementById('auth-extended-fields'), toggleModeBtn = document.getElementById('auth-toggle-mode-btn'), guestToggleBtn = document.getElementById('auth-guest-toggle-btn');
@@ -567,7 +605,7 @@
             } else {
                 gateBtn.classList.remove('hidden'); statusBox.innerHTML = ''; clientPane.classList.remove('hidden'); adminPane.classList.add('hidden');
             }
-            lucide.createIcons();
+            setTimeout(() => lucide.createIcons(), 50);
         }
 
         // --- Storefront Menu Presentation Layers ---
@@ -595,6 +633,9 @@
             activeProductContext = { ...bake, imageUrl }; document.getElementById('modal-title').innerText = bake.title;
             populateDropdownOpts('select-weight', bake.weights, ['2 Lbs (Standard Single Tier)', '4 Lbs (Two Tier)', '6 Lbs (Grand Festive Tier)']);
             populateDropdownOpts('select-flavor', bake.flavors, ['Belgian Chocolate Fudge', 'Silk Route Salted Caramel', 'Lotus Biscoff Crunch']);
+            
+            window.updateModalPriceDisplay();
+            
             if(cachedUserSession && !cachedUserSession.isAdmin && !cachedUserSession.isAnonymousGuest) {
                 document.getElementById('order-recipient-name').value = cachedUserSession.fullName || ''; document.getElementById('order-contact-number').value = cachedUserSession.savedPhone || ''; document.getElementById('order-address').value = cachedUserSession.savedAddress || '';
             } else {
@@ -602,9 +643,14 @@
             }
             document.getElementById('checkout-submit-btn').disabled = false; document.getElementById('checkout-submit-btn').innerText = "Confirm Order Reservation";
             document.getElementById('product-modal').classList.remove('hidden');
+            setTimeout(() => lucide.createIcons(), 50);
         }
 
-        window.closeModal = function() { document.getElementById('product-modal').classList.add('hidden'); document.getElementById('receipt-modal').classList.add('hidden'); };
+        window.closeModal = function() { 
+            document.getElementById('product-modal').classList.add('hidden'); 
+            document.getElementById('receipt-modal').classList.add('hidden'); 
+        };
+        
         function populateDropdownOpts(id, arr, fallbacks) {
             const el = document.getElementById(id); el.innerHTML = ''; const opts = (arr && arr.length > 0) ? arr : fallbacks;
             opts.forEach(o => { const opt = document.createElement('option'); opt.value = o; opt.innerText = o; el.appendChild(opt); });
@@ -612,9 +658,31 @@
 
         // --- Ticket Processing Framework ---
         window.submitOrderPipeline = async function() {
-            const dateIn = document.getElementById('order-delivery-date').value, nameIn = document.getElementById('order-recipient-name').value.trim(), phoneIn = document.getElementById('order-contact-number').value.trim(), addrIn = document.getElementById('order-address').value.trim(), submitBtn = document.getElementById('checkout-submit-btn');
-            if(!dateIn || !nameIn || !phoneIn || !addrIn) { triggerNotificationToast("Complete required fields."); return; }
+            const dateIn = document.getElementById('order-delivery-date').value, 
+                  nameIn = document.getElementById('order-recipient-name').value.trim(), 
+                  phoneIn = document.getElementById('order-contact-number').value.trim(), 
+                  addrIn = document.getElementById('order-address').value.trim(), 
+                  submitBtn = document.getElementById('checkout-submit-btn');
+            
+            // Logic UI Validation Check: Prevent missing parameters
+            if(!dateIn || !nameIn || !phoneIn || !addrIn) { triggerNotificationToast("Complete all required fields."); return; }
 
+            // Logic Validation Check: Reject past dates
+            const selectionTime = new Date(dateIn).setHours(0,0,0,0);
+            const todaysTime = new Date().setHours(0,0,0,0);
+            if (selectionTime < todaysTime) {
+                triggerNotificationToast("Invalid Date. Historical timelines cannot be processed.");
+                return;
+            }
+
+            // Pakistani Mobile Number Structural Match check (e.g., 03001234567 or 923001234567)
+            const phoneRegex = /^(^(03|923|\+923)[0-9]{9})$/;
+            if (!phoneRegex.test(phoneIn.replace(/\s+/g, ''))) {
+                triggerNotificationToast("Invalid Contact Number. Use valid Pakistani format.");
+                return;
+            }
+
+            // Prevent UI spamming & network duplicate processes
             submitBtn.disabled = true; submitBtn.innerText = "Securing Booking...";
             const timeObj = new Date(), d = String(timeObj.getDate()).padStart(2, '0'), m = String(timeObj.getMonth() + 1).padStart(2, '0'), y = String(timeObj.getFullYear()).slice(-2), datePrefix = `${d}${m}${y}`; 
 
@@ -631,14 +699,16 @@
                     cachedUserSession = { username: 'guest_pass', fullName: 'Guest Tracker Pass', isAnonymousGuest: true, guestTickets: localTickets };
                     localStorage.setItem('studio_session', JSON.stringify(cachedUserSession));
                 }
-                document.getElementById('invoice-cake-title').innerText = activeProductContext.title; document.getElementById('invoice-cake-weight').innerText = selectedWeight; document.getElementById('invoice-cake-flavor').innerText = selectedFlavor; document.getElementById('invoice-cake-price').innerText = activeProductContext.basePrice ? `PKR ${Number(activeProductContext.basePrice).toLocaleString()}` : 'Custom Inquire';
+                document.getElementById('invoice-cake-title').innerText = activeProductContext.title; document.getElementById('invoice-cake-weight').innerText = selectedWeight; document.getElementById('invoice-cake-flavor').innerText = selectedFlavor; 
+                document.getElementById('invoice-cake-price').innerText = `PKR ${finalCalculatedPriceCache.toLocaleString()}`;
+                
                 document.getElementById('product-modal').classList.add('hidden'); document.getElementById('receipt-ticket-label').innerText = ticketId; document.getElementById('receipt-modal').classList.remove('hidden');
                 executeSessionUIRendering(); triggerNotificationToast("Booking allocation locked.");
             } catch(e) { triggerNotificationToast("Vault submission failure."); submitBtn.disabled = false; submitBtn.innerText = "Confirm Order Reservation"; }
         };
 
         window.dispatchWhatsAppReceipt = function() {
-            let msg = `🏛️ *THE BAKING STUDIO ATELIER RECEIPTS*\n=====================================\n\n🎟️ *Order Ticket ID:* ${newlyGeneratedTicketCache}\n🎂 *Cake Foundation:* ${activeProductContext.title}\nScale Weight: ${document.getElementById('select-weight').value}\nSelected Flavor: ${document.getElementById('select-flavor').value}\n\n=====================================\n💼 *Payment Protocol:* JazzCash to 03001311047\n\n_Attaching verification screenshot down underneath:_`;
+            let msg = `🏛️ *THE BAKING STUDIO ATELIER RECEIPTS*\n=====================================\n\n🎟️ *Order Ticket ID:* ${newlyGeneratedTicketCache}\n🎂 *Cake Foundation:* ${activeProductContext.title}\nScale Weight: ${document.getElementById('select-weight').value}\nSelected Flavor: ${document.getElementById('select-flavor').value}\n💸 *Calculated Cost:* PKR ${finalCalculatedPriceCache.toLocaleString()}\n\n=====================================\n💼 *Payment Protocol:* JazzCash to 03001311047\n\n_Attaching verification screenshot down underneath:_`;
             window.open(`https://wa.me/923001311047?text=${encodeURIComponent(msg)}`, '_blank'); window.closeModal();
         };
 
@@ -675,7 +745,8 @@
             document.getElementById('inspect-btn-approve').onclick = () => { window.updateOrderStatus(log._id, 'Payment Confirmed'); window.closeInspectModal(); };
             document.getElementById('inspect-btn-bake').onclick = () => { window.updateOrderStatus(log._id, 'Baking In Progress'); window.closeInspectModal(); };
             document.getElementById('inspect-btn-cancel').onclick = () => { window.updateOrderStatus(log._id, 'Declined/Refunded'); window.closeInspectModal(); };
-            modal.classList.remove('hidden'); lucide.createIcons();
+            modal.classList.remove('hidden'); 
+            setTimeout(() => lucide.createIcons(), 50);
         };
         window.closeInspectModal = function() { document.getElementById('admin-inspect-modal').classList.add('hidden'); };
 
@@ -714,6 +785,7 @@
             const banner = document.getElementById('live-notification-banner'); document.getElementById('live-notification-text').innerText = `Ticket #${ticketId} registered by ${customerName}`;
             banner.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-50px]'); banner.classList.add('opacity-100', 'translate-y-0');
             setTimeout(() => { window.closeNotificationBanner(); }, 6000);
+            setTimeout(() => lucide.createIcons(), 50);
         }
         window.closeNotificationBanner = function() { const banner = document.getElementById('live-notification-banner'); banner.classList.add('opacity-0', 'translate-y-[-50px]', 'pointer-events-none'); banner.classList.remove('opacity-100', 'translate-y-0'); };
         function triggerNotificationToast(message) { const toast = document.getElementById('global-toast'); toast.innerText = message; toast.style.opacity = '1'; toast.style.transform = 'translateY(0)'; setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateY(10px)'; }, 3000); }
