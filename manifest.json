@@ -1,0 +1,22 @@
+{
+  "short_name": "BakingStudio",
+  "name": "The Baking Studio Ateliers",
+  "icons": [
+    {
+      "src": "https://cdn.sanity.io/images/t7g7grwf/production/bf5e59247653bbd742617a2267232230a845fe9b-256x256.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "https://cdn.sanity.io/images/t7g7grwf/production/bf5e59247653bbd742617a2267232230a845fe9b-256x256.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/awenity_bakery_concept/index.html",
+  "background_color": "#FDFCF7",
+  "theme_color": "#171717",
+  "display": "standalone",
+  "orientation": "portrait"
+}
