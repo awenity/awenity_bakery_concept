@@ -26,9 +26,24 @@
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #FDFCF7; color: #262626; }
         .luxury-gradient { background: linear-gradient(180deg, #F9F6EE 0%, #FDFCF7 100%); }
+        @keyframes pulse-glow {
+            0%, 100% { border-color: #EBCBCC; box-shadow: 0 0 0 0 rgba(212, 163, 163, 0); }
+            50% { border-color: #D4A3A3; box-shadow: 0 0 12px 2px rgba(212, 163, 163, 0.3); }
+        }
+        .new-order-highlight { animation: pulse-glow 2.5s ease-in-out infinite; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-roseGold-100">
+
+    <!-- Push Notification Overlay Banner -->
+    <div id="live-notification-banner" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-charcoal-900 border border-roseGold-500/30 text-cream-50 text-xs font-medium tracking-widest uppercase px-8 py-4 rounded-xl shadow-2xl flex items-center gap-4 transition-all duration-500 opacity-0 translate-y-[-50px] pointer-events-none max-w-md w-full">
+        <div class="w-2 h-2 rounded-full bg-roseGold-500 animate-ping"></div>
+        <div class="flex-grow">
+            <span class="font-bold text-roseGold-200 block text-[10px]">New Atelier Request</span>
+            <span id="live-notification-text">Ticket received live.</span>
+        </div>
+        <button onclick="closeNotificationBanner()" class="text-white/40 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
 
     <!-- Premium Header -->
     <header class="sticky top-0 z-40 bg-cream-50/80 backdrop-blur-xl border-b border-roseGold-100/60">
@@ -49,7 +64,7 @@
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-6 py-12 flex-grow">
+    <main class="max-w-7xl mx-auto px-6 py-12 flex-grow w-full">
         <!-- Client Menu View Component -->
         <div id="client-view-pane" class="space-y-16">
             <section class="text-center py-20 bg-cream-100 rounded-3xl border border-roseGold-100/40 px-4">
@@ -68,44 +83,33 @@
             </section>
         </div>
 
-        <!-- Administrative Dashboard View Component -->
+        <!-- High-End Administrative Dashboard Order Card Grid Component -->
         <div id="admin-view-pane" class="hidden space-y-8">
-            <div class="flex items-center justify-between border-b border-roseGold-200 pb-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-roseGold-200 pb-6">
                 <div>
                     <div class="flex items-center gap-3">
-                        <h2 class="font-serif text-3xl text-charcoal-900 font-500">Atelier Order Manager</h2>
+                        <h2 class="font-serif text-3xl text-charcoal-900 font-500">Live Workspace Console</h2>
                         <div id="admin-refresh-indicator" class="opacity-0 transition-opacity duration-300 flex items-center gap-1.5 text-xs text-roseGold-600 font-medium">
                             <i data-lucide="refresh-cw" class="w-3.5 h-3.5 animate-spin"></i> Background Syncing...
                         </div>
                     </div>
-                    <p class="text-xs text-gray-500">Approve incoming reservations, verify transactions, and coordinate deliveries live.</p>
+                    <p class="text-xs text-gray-500">Click any card to inspect full coordinate parameters and update pipeline states.</p>
                 </div>
-                <button onclick="logoutSession()" class="bg-charcoal-900 text-white px-5 py-2.5 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-roseGold-700 transition-colors">
+                <button onclick="logoutSession()" class="bg-charcoal-900 text-white px-5 py-2.5 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-roseGold-700 transition-colors self-start sm:self-auto">
                     Exit Management View
                 </button>
             </div>
 
-            <div class="bg-white border border-roseGold-200 rounded-2xl overflow-hidden shadow-sm">
-                <div class="p-6 bg-cream-100 border-b border-roseGold-100 flex justify-between items-center">
-                    <h3 class="text-xs uppercase font-bold tracking-wider text-charcoal-900">Current Order Registry</h3>
-                    <div class="text-[11px] text-gray-400 italic">Listening for live incoming orders...</div>
+            <!-- Dynamic Luxury Admin Card Grid Layout Container -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between px-2">
+                    <h3 class="text-[10px] uppercase font-bold tracking-[0.2em] text-gray-400">Atelier Processing Queue</h3>
+                    <div class="text-[10px] text-emerald-600 font-semibold uppercase tracking-wider bg-emerald-50 px-2 py-0.5 rounded flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Streaming Channel Open
+                    </div>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-xs">
-                        <thead>
-                            <tr class="bg-cream-50 border-b border-roseGold-100 text-[10px] uppercase font-bold tracking-wider text-gray-500">
-                                <th class="p-4">Ticket</th>
-                                <th class="p-4">Guest Details</th>
-                                <th class="p-4">Bake Selection</th>
-                                <th class="p-4">Delivery Window</th>
-                                <th class="p-4">Status</th>
-                                <th class="p-4 text-right">Update Status Queue</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-orders-table-body">
-                            <tr><td colspan="6" class="p-8 text-center italic text-gray-400">Loading order logs...</td></tr>
-                        </tbody>
-                    </table>
+                <div id="admin-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="col-span-full text-center text-xs text-gray-400 py-12 italic">Syncing active registries...</div>
                 </div>
             </div>
         </div>
@@ -203,6 +207,54 @@
         </div>
     </div>
 
+    <!-- Administrative Order Inspection Panel Modal -->
+    <div id="admin-inspect-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/60 backdrop-blur-md hidden">
+        <div class="bg-cream-50 rounded-2xl max-w-md w-full overflow-hidden shadow-2xl border border-roseGold-200 flex flex-col">
+            <div class="p-5 border-b border-roseGold-100 flex justify-between items-center bg-cream-100">
+                <div class="flex items-center gap-2">
+                    <h3 class="font-serif text-lg font-semibold">Inspect Invoice Ticket</h3>
+                    <span id="inspect-ticket-badge" class="font-mono text-xs bg-charcoal-900 text-white px-2 py-0.5 rounded font-bold">--</span>
+                </div>
+                <button onclick="closeInspectModal()" class="text-charcoal-900 opacity-50"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div class="p-6 space-y-5 text-xs">
+                <div class="grid grid-cols-2 gap-4 bg-white p-4 rounded-xl border border-roseGold-100">
+                    <div>
+                        <span class="text-[10px] text-gray-400 uppercase font-bold block mb-0.5">Recipient Guest</span>
+                        <div id="inspect-name" class="font-semibold text-charcoal-900 text-sm">--</div>
+                        <div id="inspect-phone" class="text-roseGold-700 font-medium font-mono mt-0.5">--</div>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-gray-400 uppercase font-bold block mb-0.5">Account Token</span>
+                        <div id="inspect-username" class="font-mono bg-cream-50 px-2 py-1 rounded border inline-block mt-0.5 text-gray-600">--</div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-roseGold-100 space-y-2">
+                    <span class="text-[10px] text-gray-400 uppercase font-bold block">Bake Pipeline Specifications</span>
+                    <div class="text-sm font-semibold text-charcoal-900" id="inspect-cake">--</div>
+                    <div class="text-gray-600 flex justify-between"><span>Weight Vol:</span> <strong id="inspect-weight" class="text-charcoal-900">--</strong></div>
+                    <div class="text-gray-600 flex justify-between"><span>Flavor Base:</span> <strong id="inspect-flavor" class="text-charcoal-900">--</strong></div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-roseGold-100 space-y-1.5">
+                    <span class="text-[10px] text-gray-400 uppercase font-bold block">Delivery Target window</span>
+                    <div class="text-charcoal-900 font-semibold flex items-center gap-1"><i data-lucide="calendar" class="w-3.5 h-3.5 text-roseGold-600"></i> <span id="inspect-date">--</span></div>
+                    <div class="text-gray-500 font-light leading-relaxed bg-cream-50/50 border p-2 rounded-lg mt-1 whitespace-pre-wrap" id="inspect-address">--</div>
+                </div>
+
+                <div class="bg-cream-100 border border-roseGold-200 rounded-xl p-4 space-y-2">
+                    <span class="text-[10px] text-charcoal-800 uppercase font-bold block text-center tracking-wider">Update Order Pipeline Tracking Queue</span>
+                    <div class="grid grid-cols-3 gap-2 text-[10px] uppercase font-bold tracking-wide">
+                        <button id="inspect-btn-approve" class="bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 px-1 rounded-lg text-center transition-colors shadow-sm">Approve Pay</button>
+                        <button id="inspect-btn-bake" class="bg-charcoal-900 hover:bg-roseGold-700 text-white py-2.5 px-1 rounded-lg text-center transition-colors shadow-sm">Mark Baking</button>
+                        <button id="inspect-btn-cancel" class="bg-red-50 border border-red-200 hover:bg-red-600 hover:text-white text-red-700 py-2.5 px-1 rounded-lg text-center transition-colors">Cancel Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Extended Account Details & Live Tracking Status Panel Drawer -->
     <div id="settings-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/60 backdrop-blur-md hidden">
         <div class="bg-cream-50 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-roseGold-200 flex flex-col max-h-[92vh]">
@@ -283,10 +335,10 @@
                     </div>
                 </div>
 
-                <!-- Guest Tracking Special Sub-Input -->
+                <!-- Guest Tracking Input -->
                 <div id="auth-guest-track-fields" class="hidden">
                     <label class="block font-bold text-gray-500 mb-1">Enter Order Ticket ID</label>
-                    <input type="text" id="auth-guest-ticket-input" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none" placeholder="e.g. 130726001">
+                    <input type="text" id="auth-guest-ticket-input" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none" placeholder="e.g. 130726015">
                 </div>
 
                 <div class="pt-2 flex flex-col gap-2">
@@ -335,6 +387,9 @@
         let isGuestTrackMode = false;
         let newlyGeneratedTicketCache = "";
         let adminSubscriptionHook = null;
+        
+        // Tracking array used to evaluate if an incoming mutation represents a genuinely fresh client document entry
+        let existingTicketsRegistryCache = []; 
 
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
@@ -352,10 +407,8 @@
                     document.getElementById('settings-phone').value = cachedUserSession.savedPhone || '';
                     document.getElementById('settings-address').value = cachedUserSession.savedAddress || '';
                 } else {
-                    // Hide profile modifier form if current card session is an anonymous guest tracking pass
                     document.getElementById('settings-profile-fields-block').classList.add('hidden');
                 }
-                
                 renderUserOrderTimeline();
                 modal.classList.remove('hidden');
             } else {
@@ -374,7 +427,6 @@
                 let params = {};
 
                 if (cachedUserSession.isAnonymousGuest) {
-                    // Pull specific string parameters matched directly to the local ticket profile cache
                     query = `*[_type == "order" && ticketId in $tickets] | order(_createdAt desc)`;
                     params = { tickets: cachedUserSession.guestTickets || [] };
                 } else {
@@ -386,7 +438,7 @@
                 historyBox.innerHTML = '';
                 
                 if(!clientOrders || clientOrders.length === 0) {
-                    historyBox.innerHTML = `<p class="text-gray-400 italic text-center py-4 bg-white rounded-xl border border-dashed border-roseGold-200">No active bookings located.</p>`;
+                    historyBox.innerHTML = `<p class="text-gray-400 italic text-center py-4 bg-white rounded-xl border border-dashed border-roseGold-200">No current invoice tickets located.</p>`;
                     return;
                 }
 
@@ -500,14 +552,13 @@
                 toggleBtn.innerText = "Return to Profile Sign In";
             } else {
                 title.innerText = "Access Atelier Profile";
-                extendedFields.classList.add('hidden');
+                extendedFields.className = 'hidden';
                 passwordBlock.classList.remove('hidden');
                 toggleBtn.innerText = "Create an Atelier Account Card";
             }
         };
 
         window.processAuthSubmission = async function() {
-            // Handle anonymous tracking validation logic loop cleanly first
             if (isGuestTrackMode) {
                 const targetTicket = document.getElementById('auth-guest-ticket-input').value.trim();
                 if(!targetTicket) {
@@ -522,7 +573,6 @@
                         return;
                     }
 
-                    // Assign specialized runtime guest authorization tracking tokens safely
                     cachedUserSession = {
                         username: 'guest_pass',
                         fullName: 'Guest Order Tracker',
@@ -533,9 +583,9 @@
                     localStorage.setItem('studio_session', JSON.stringify(cachedUserSession));
                     executeSessionUIRendering();
                     window.toggleAuthModal();
-                    window.toggleSettingsModal(); // Instantly pop open the workflow history timeline view
+                    window.toggleSettingsModal(); 
                 } catch(err) {
-                    triggerNotificationToast("Server error during ticket reference lookups.");
+                    triggerNotificationToast("Server error during ticket lookups.");
                 }
                 return;
             }
@@ -581,10 +631,12 @@
             } else {
                 try {
                     const matchedUser = await client.fetch(`*[_type == "studioUser" && username == $usr && password == $pwd][0]`, { usr: userIn, pwd: passIn });
+                    
                     if(!matchedUser) {
-                        triggerNotificationToast("Invalid configuration credentials verification match.");
+                        triggerNotificationToast("Invalid credentials verification match.");
                         return;
                     }
+                    
                     cachedUserSession = matchedUser;
                     localStorage.setItem('studio_session', JSON.stringify(cachedUserSession));
                     executeSessionUIRendering();
@@ -605,7 +657,6 @@
             cachedUserSession = null;
             localStorage.removeItem('studio_session');
             
-            // Cleanly kill active streaming socket loops if admin logs out
             if(adminSubscriptionHook) {
                 adminSubscriptionHook.unsubscribe();
                 adminSubscriptionHook = null;
@@ -643,7 +694,8 @@
                 if(cachedUserSession.isAdmin) {
                     clientPane.classList.add('hidden');
                     adminPane.classList.remove('hidden');
-                    setupLiveAdminStream(); // Mount instant web-socket transaction streaming
+                    loadAdminDashboard(false, true); // True flag primes initial cache array map silently
+                    setupLiveAdminStream(); 
                 } else {
                     clientPane.classList.remove('hidden');
                     adminPane.classList.add('hidden');
@@ -788,7 +840,6 @@
                     status: 'Pending Payment Verification'
                 });
                 
-                // If the user checked out anonymously, append this ticket ID into a guest array tracking pass context
                 if(!cachedUserSession || cachedUserSession.isAnonymousGuest) {
                     let localTickets = [];
                     if(cachedUserSession && cachedUserSession.guestTickets) {
@@ -815,7 +866,6 @@
                 document.getElementById('receipt-ticket-label').innerText = ticketId;
                 document.getElementById('receipt-modal').classList.remove('hidden');
                 
-                // Re-evaluate navbar status pill states if user is newly configured guest profile tracking entity
                 executeSessionUIRendering();
                 triggerNotificationToast("Atelier booking reservation allocated.");
             } catch(e) {
@@ -839,98 +889,213 @@
             msg += `💼 *Payment Retailing Protocol:* JazzCash to 03001311047\n\n`;
             msg += `_Attaching transaction verification snapshot status image below:_`;
 
-            window.open(`https://wa.me/923001311047?text=${encodeURIComponent(msg)}`, '_blank');
+            window.open replay(`https://wa.me/923001311047?text=${encodeURIComponent(msg)}`, '_blank');
             window.closeModal();
         };
 
-        // --- Flicker-Free Real-Time Administrative Management Console ---
-        async function loadAdminDashboard(isBackgroundSync = false) {
-            const tableBody = document.getElementById('admin-orders-table-body');
+        // --- Administrative Management Luxury Card Grid Logic Operations ---
+        async function loadAdminDashboard(isBackgroundSync = false, isInitialBootLoad = false) {
+            const cardsContainer = document.getElementById('admin-cards-container');
             const spinIndicator = document.getElementById('admin-refresh-indicator');
 
             if(isBackgroundSync) {
                 spinIndicator.style.opacity = '1';
             } else {
-                tableBody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-xs tracking-widest text-gray-400 animate-pulse">Syncing order repository registries...</td></tr>`;
+                cardsContainer.innerHTML = `<div class="col-span-full text-center text-xs tracking-widest text-gray-400 animate-pulse py-12">Synchronizing live cloud logs...</div>`;
             }
 
             try {
                 const logs = await client.fetch(`*[_type == "order"] | order(_createdAt desc)`);
-                tableBody.innerHTML = '';
+                cardsContainer.innerHTML = '';
 
                 if(!logs || logs.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="6" class="p-8 text-center italic text-gray-400">No active bookings registered.</td></tr>`;
+                    cardsContainer.innerHTML = `<div class="col-span-full py-12 text-center text-xs italic text-gray-400 bg-white border rounded-2xl border-dashed">No active bookings registered in database ecosystem.</div>`;
                     return;
                 }
 
-                logs.forEach(log => {
-                    const row = document.createElement('tr');
-                    row.className = "border-b border-roseGold-100 hover:bg-cream-100/50 transition-colors";
-                    
-                    let badgeClass = "bg-amber-50 text-amber-700 border-amber-200";
-                    if(log.status === 'Payment Confirmed') badgeClass = "bg-blue-50 text-blue-700 border-blue-200";
-                    if(log.status === 'Baking In Progress') badgeClass = "bg-purple-50 text-purple-700 border-purple-200";
-                    if(log.status === 'Declined/Refunded') badgeClass = "bg-red-50 text-red-700 border-red-200";
+                // If loading dashboard for the first time, harvest current active keys silently
+                if (isInitialBootLoad) {
+                    existingTicketsRegistryCache = logs.map(l => l.ticketId);
+                }
 
-                    row.innerHTML = `
-                        <td class="p-4 font-mono font-bold text-charcoal-900">${log.ticketId}</td>
-                        <td class="p-4">
-                            <div class="font-semibold">${log.customerName}</div>
-                            <div class="text-[10px] text-gray-400">Mobile: ${log.contactNumber}</div>
-                        </td>
-                        <td class="p-4">
-                            <div class="font-medium text-charcoal-900">${log.cakeTitle}</div>
-                            <div class="text-[10px] text-gray-400">${log.weight} / ${log.flavor}</div>
-                        </td>
-                        <td class="p-4">
-                            <div class="max-w-xs truncate">${log.deliveryAddress}</div>
-                            <div class="text-[10px] font-semibold text-charcoal-800 mt-0.5">Delivery Target: ${log.deliveryDate}</div>
-                        </td>
-                        <td class="p-4"><span class="px-2.5 py-1 border rounded-full text-[10px] font-semibold tracking-wide ${badgeClass}">${log.status}</span></td>
-                        <td class="p-4 text-right font-medium">
-                            <div class="flex flex-wrap items-center justify-end gap-3 text-[11px]">
-                                <button onclick="window.updateOrderStatus('${log._id}', 'Payment Confirmed')" class="text-emerald-700 hover:text-emerald-900 hover:underline">Approve Payment</button>
-                                <span class="text-gray-300">|</span>
-                                <button onclick="window.updateOrderStatus('${log._id}', 'Baking In Progress')" class="text-purple-700 hover:text-purple-900 hover:underline">Mark Baking</button>
-                                <span class="text-gray-300">|</span>
-                                <button onclick="window.updateOrderStatus('${log._id}', 'Declined/Refunded')" class="text-red-600 hover:text-red-900 hover:underline">Cancel Order</button>
+                logs.forEach(log => {
+                    const card = document.createElement('div');
+                    
+                    // Highlight glowing status states applied instantly if matching real time mutation inserts
+                    const isNewlyInjectedNode = !isInitialBootLoad && !existingTicketsRegistryCache.includes(log.ticketId);
+                    
+                    card.className = `bg-white border rounded-2xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between gap-4 border-roseGold-100/70 relative overflow-hidden group ${isNewlyInjectedNode ? 'new-order-highlight' : ''}`;
+                    card.id = `admin-card-${log._id}`;
+
+                    let badgeClass = "bg-amber-50 text-amber-700 border-amber-200/80";
+                    if(log.status === 'Payment Confirmed') badgeClass = "bg-blue-50 text-blue-700 border-blue-200/80";
+                    if(log.status === 'Baking In Progress') badgeClass = "bg-purple-50 text-purple-700 border-purple-200/80";
+                    if(log.status === 'Declined/Refunded') badgeClass = "bg-red-50 text-red-700 border-red-200/80";
+
+                    card.innerHTML = `
+                        <!-- Card Top Metric Block -->
+                        <div class="flex justify-between items-start border-b border-roseGold-100/50 pb-3">
+                            <div>
+                                <span class="text-[9px] uppercase tracking-wider font-bold text-gray-400 block">Ticket Code</span>
+                                <div class="font-mono text-sm font-bold text-charcoal-900 group-hover:text-roseGold-700 transition-colors">#${log.ticketId}</div>
                             </div>
-                        </td>
+                            <span class="px-2.5 py-0.5 border text-[9px] font-semibold rounded-full uppercase tracking-wide ${badgeClass}">
+                                ${log.status}
+                            </span>
+                        </div>
+
+                        <!-- Card Central Specification Block -->
+                        <div class="space-y-2 text-xs flex-grow">
+                            <div>
+                                <span class="text-[9px] uppercase font-bold text-gray-400 block">Bake Details</span>
+                                <div class="font-semibold text-charcoal-900 text-sm">${log.cakeTitle}</div>
+                                <div class="text-gray-500 text-[10px] mt-0.5">${log.weight} / ${log.flavor}</div>
+                            </div>
+                            <div class="pt-1">
+                                <span class="text-[9px] uppercase font-bold text-gray-400 block">Client Identity</span>
+                                <div class="font-medium text-charcoal-800">${log.customerName}</div>
+                                <div class="text-[10px] text-gray-400 font-mono">${log.contactNumber}</div>
+                            </div>
+                        </div>
+
+                        <!-- Card Base Metric Block -->
+                        <div class="bg-cream-50 rounded-xl p-2.5 flex items-center justify-between text-[10px] text-gray-500 border border-roseGold-100/40">
+                            <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3.5 h-3.5 text-roseGold-500"></i> Due Date:</span>
+                            <strong class="text-charcoal-900 font-semibold">${log.deliveryDate}</strong>
+                        </div>
                     `;
-                    tableBody.appendChild(row);
+                    
+                    // Click tracking opens deep detailed overlay module inspector
+                    card.onclick = () => openInspectModal(log);
+                    cardsContainer.appendChild(card);
                 });
                 lucide.createIcons();
             } catch(err) {
-                tableBody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-700 font-semibold">Workspace context sync failure.</td></tr>`;
+                cardsContainer.innerHTML = `<div class="col-span-full py-12 text-center text-xs font-semibold text-red-700">Console data collection synchronization crash exception.</div>`;
             } finally {
                 spinIndicator.style.opacity = '0';
             }
         }
 
-        // Live Real-Time Socket Stream subscription integration to catch fresh incoming bakes instantly
+        // --- Deep Admin Inspect Overlay Modal Function Management Loops ---
+        window.openInspectModal = function(log) {
+            const modal = document.getElementById('admin-inspect-modal');
+            
+            document.getElementById('inspect-ticket-badge').innerText = `#${log.ticketId}`;
+            document.getElementById('inspect-name').innerText = log.customerName;
+            document.getElementById('inspect-phone').innerText = log.contactNumber;
+            document.getElementById('inspect-username').innerText = log.usernameRef || 'Guest';
+            document.getElementById('inspect-cake').innerText = log.cakeTitle;
+            document.getElementById('inspect-weight').innerText = log.weight;
+            document.getElementById('inspect-flavor').innerText = log.flavor;
+            document.getElementById('inspect-date').innerText = log.deliveryDate;
+            document.getElementById('inspect-address').innerText = log.deliveryAddress;
+
+            // Allocate operational mutation functions bound correctly to parameters identifiers
+            document.getElementById('inspect-btn-approve').onclick = () => { window.updateOrderStatus(log._id, 'Payment Confirmed'); window.closeInspectModal(); };
+            document.getElementById('inspect-btn-bake').onclick = () => { window.updateOrderStatus(log._id, 'Baking In Progress'); window.closeInspectModal(); };
+            document.getElementById('inspect-btn-cancel').onclick = () => { window.updateOrderStatus(log._id, 'Declined/Refunded'); window.closeInspectModal(); };
+
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        };
+
+        window.closeInspectModal = function() {
+            document.getElementById('admin-inspect-modal').classList.add('hidden');
+        };
+
+        // Live Real-Time Web-Socket Stream subscription integration catching fresh incoming database uploads instantly
         function setupLiveAdminStream() {
-            if(adminSubscriptionHook) return; // Prevent duplicate sockets
+            if(adminSubscriptionHook) return; 
 
             const queryFilter = `*[_type == "order"]`;
             adminSubscriptionHook = client.listen(queryFilter).subscribe({
                 next: (mutation) => {
-                    console.log("Live Mutation Handshake Logged:", mutation);
-                    // Re-trigger dashboard table render in background smoothly without wipe-out flashes
-                    loadAdminDashboard(true);
-                    triggerNotificationToast("Atelier Registry Mutated Live.");
+                    // Filter down to verify if document represents a real time creation insert event mutation hook
+                    if(mutation.transition === 'appear' && mutation.result) {
+                        const newDoc = mutation.result;
+                        
+                        // Prevent alert flashes on standard boot sync repetitions loops
+                        if(!existingTicketsRegistryCache.includes(newDoc.ticketId)) {
+                            // Play elegant push notification audio tone chime
+                            triggerLivePushAudioAlert();
+                            
+                            // Render visibility layout status overlay top warning banner
+                            triggerNotificationOverlayBanner(newDoc.ticketId, newDoc.customerName);
+                            
+                            // Re-append local memory track index tracking variables array cleanly
+                            existingTicketsRegistryCache.push(newDoc.ticketId);
+                        }
+                    }
+                    loadAdminDashboard(true, false); 
                 },
-                error: (err) => console.error("Real-time pipeline drop exception:", err)
+                error: (err) => console.error("Real-time pipeline socket error exception:", err)
             });
         }
 
         window.updateOrderStatus = async function(id, status) {
             try {
                 await client.patch(id).set({ status }).commit();
-                triggerNotificationToast(`Ticket status updated cleanly.`);
-                loadAdminDashboard(true); // Soft background reload
+                triggerNotificationToast(`Order Tracking Status Mutated.`);
+                loadAdminDashboard(true, false); 
             } catch(e) {
                 triggerNotificationToast("Failed status change updates.");
             }
+        };
+
+        // Synthetic programmatical creation generator for high end browser sound generation
+        function triggerLivePushAudioAlert() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // First Note Chime
+                const osc1 = ctx.createOscillator();
+                const gain1 = ctx.createGain();
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(523.25, ctx.currentTime); // C5 Note
+                gain1.gain.setValueAtTime(0.15, ctx.currentTime);
+                gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+                osc1.connect(gain1);
+                gain1.connect(ctx.destination);
+                osc1.start();
+                osc1.stop(ctx.currentTime + 0.4);
+
+                // Second Note Chime (Delayed Harmony)
+                setTimeout(() => {
+                    const osc2 = ctx.createOscillator();
+                    const gain2 = ctx.createGain();
+                    osc2.type = 'sine';
+                    osc2.frequency.setValueAtTime(659.25, ctx.currentTime); // E5 Note
+                    gain2.gain.setValueAtTime(0.15, ctx.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+                    osc2.connect(gain2);
+                    gain2.connect(ctx.destination);
+                    osc2.start();
+                    osc2.stop(ctx.currentTime + 0.5);
+                }, 150);
+
+            } catch(e) {
+                console.warn("Audio Context pipeline blocked due to device media interactions rules:", e);
+            }
+        }
+
+        function triggerNotificationOverlayBanner(ticketId, customerName) {
+            const banner = document.getElementById('live-notification-banner');
+            document.getElementById('live-notification-text').innerText = `Ticket #${ticketId} registered by ${customerName}`;
+            
+            banner.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-50px]');
+            banner.classList.add('opacity-100', 'translate-y-0');
+            
+            // Automatically clear banner state after readable tracking delay loop phase window
+            setTimeout(() => {
+                window.closeNotificationBanner();
+            }, 6000);
+        }
+
+        window.closeNotificationBanner = function() {
+            const banner = document.getElementById('live-notification-banner');
+            banner.classList.add('opacity-0', 'translate-y-[-50px]', 'pointer-events-none');
+            banner.classList.remove('opacity-100', 'translate-y-0');
         };
 
         function triggerNotificationToast(message) {
