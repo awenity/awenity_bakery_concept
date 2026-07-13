@@ -1,10 +1,10 @@
 importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
 
-const CACHE_NAME = 'baking-studio-cache-v3';
+const CACHE_NAME = 'baking-studio-cache-v4';
 const ASSETS_TO_CACHE = [
-  '/awenity_bakery_concept/',
-  '/awenity_bakery_concept/index.html',
-  '/awenity_bakery_concept/manifest.json'
+  './',
+  './index.html',
+  './manifest.json'
 ];
 
 self.addEventListener('install', (event) => {

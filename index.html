@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full w-full scroll-smooth">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Baking Studio | Haute Patisserie</title>
     
+    <!-- Relative Manifest Hook Routing Setup -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#171717">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -26,10 +27,11 @@
             }
         }
     </script>
+    <!-- Google Fonts & Lucide Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght=0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- OneSignal SDK -->
+    <!-- OneSignal Web Push Engine SDK Integration -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
         window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -43,7 +45,7 @@
     </script>
 
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #FDFCF7; color: #262626; overscroll-behavior-y: none; }
+        body { font-family: 'Inter', sans-serif; background-color: #FDFCF7; color: #262626; }
         .luxury-gradient { background: linear-gradient(180deg, #F9F6EE 0%, #FDFCF7 100%); }
         .animated-spin-custom { animation: spin 3s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -54,137 +56,113 @@
         .new-order-highlight { animation: pulse-glow 2.5s ease-in-out infinite; }
     </style>
 </head>
-<body class="h-full w-full antialiased selection:bg-roseGold-100 flex flex-col overflow-x-hidden">
+<body class="min-h-screen flex flex-col antialiased selection:bg-roseGold-100">
 
-    <!-- STEP 1 & 2: GATEWAY INTERACTIVE ACCESS SYSTEM (Hides if app runs in standalone display-mode) -->
-    <div id="gateway-view" class="hidden fixed inset-0 z-[999] bg-cream-50 w-full h-full flex flex-col justify-center items-center px-6 relative overflow-y-auto">
-        
-        <!-- Main Install Request Card -->
-        <div id="gateway-install-card" class="bg-white rounded-[32px] border border-roseGold-200 p-8 text-center shadow-xl flex flex-col items-center gap-6 max-w-md w-full transition-all duration-500">
-            <div class="w-20 h-20 rounded-2xl bg-cream-100 flex items-center justify-center p-2 border border-roseGold-100 shadow-inner">
-                <i data-lucide="cake" class="w-10 h-10 text-roseGold-600"></i>
-            </div>
-            <div>
-                <h1 class="text-2xl font-serif text-charcoal-900 tracking-wide">The Baking Studio App</h1>
-                <p class="text-gray-500 mt-2 text-xs leading-relaxed">To view our bespoke confectionery formulations and securely track your orders live, install the studio micro-app directly to your home screen workspace.</p>
-            </div>
-            <div class="w-full border-t border-roseGold-100/50"></div>
-            <button id="btn-install-pwa" class="w-full bg-charcoal-900 hover:bg-roseGold-700 text-cream-50 font-semibold py-4 px-6 rounded-xl transition duration-300 flex items-center justify-center gap-2 tracking-widest uppercase text-xs shadow-md">
-                <i data-lucide="download-cloud" class="w-4 h-4"></i> Install Studio Space
+    <!-- Optional Premium Native PWA Top Installation Promotion Banner Bar -->
+    <div id="top-pwa-install-banner" class="hidden w-full bg-gradient-to-r from-charcoal-900 to-charcoal-800 text-cream-50 text-xs py-3.5 px-6 flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-roseGold-700/20 shadow-md">
+        <div class="flex items-center gap-3 text-center sm:text-left">
+            <i data-lucide="smartphone" class="w-4 h-4 text-roseGold-200 hidden sm:block flex-shrink-0 animate-bounce"></i>
+            <p class="tracking-wide font-medium">
+                To easily track your order live anytime, install <span class="font-serif italic text-roseGold-200">The Baking Studio app</span> directly on your home screen.
+            </p>
+        </div>
+        <div class="flex items-center gap-4">
+            <button id="top-pwa-native-install-btn" class="bg-cream-50 text-charcoal-900 px-4 py-1.5 rounded-lg font-bold text-[10px] uppercase tracking-wider hover:bg-roseGold-50 transition-colors shadow-sm whitespace-nowrap">
+                Install App
+            </button>
+            <button onclick="dismissTopInstallBanner()" class="text-white/40 hover:text-white transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
             </button>
         </div>
-
-        <!-- Onboarding Progress Guide -->
-        <div id="gateway-onboarding-card" class="hidden bg-white rounded-[32px] border border-roseGold-200 p-8 text-center shadow-xl flex flex-col items-center gap-6 max-w-md w-full transition-all duration-500">
-            <div class="relative w-16 h-16">
-                <div class="absolute inset-0 rounded-full border-4 border-cream-200"></div>
-                <div class="absolute inset-0 rounded-full border-4 border-roseGold-500 border-t-transparent animated-spin-custom"></div>
-                <div class="absolute inset-0 flex items-center justify-center text-roseGold-600"><i data-lucide="cloud-lightning" class="w-5 h-5"></i></div>
-            </div>
-            <div>
-                <h2 class="text-xl font-serif text-charcoal-900">Setting Up Atelier App</h2>
-                <p class="text-roseGold-700 font-medium text-xs mt-1">Check your home screen menu in a few seconds.</p>
-            </div>
-            <div class="w-full bg-cream-50 rounded-xl p-4 border border-roseGold-100 text-left">
-                <h3 id="platform-title" class="font-bold text-charcoal-900 text-[10px] uppercase tracking-wider flex items-center gap-2 mb-2">Instructions</h3>
-                <div id="platform-instructions" class="text-gray-500 text-xs leading-relaxed space-y-1"></div>
-            </div>
-        </div>
     </div>
 
-    <!-- PWA VIEWPORT WRAPPER (DASHBOARD) -->
-    <div id="dashboard-view" class="hidden flex-col flex-1 w-full relative">
-        <!-- Live Push Alert Banner -->
-        <div id="live-notification-banner" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-charcoal-900 border border-roseGold-500/30 text-cream-50 text-xs font-medium tracking-widest uppercase px-8 py-4 rounded-xl shadow-2xl flex items-center gap-4 transition-all duration-500 opacity-0 translate-y-[-50px] pointer-events-none max-w-md w-full">
-            <div class="w-2 h-2 rounded-full bg-roseGold-500 animate-ping"></div>
-            <div class="flex-grow">
-                <span class="font-bold text-roseGold-200 block text-[10px]">New Atelier Request</span>
-                <span id="live-notification-text">Ticket received live.</span>
-            </div>
-            <button onclick="closeNotificationBanner()" class="text-white/40 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
+    <!-- Live Push Real-Time Audio-Visual Banner Component -->
+    <div id="live-notification-banner" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-charcoal-900 border border-roseGold-500/30 text-cream-50 text-xs font-medium tracking-widest uppercase px-8 py-4 rounded-xl shadow-2xl flex items-center gap-4 transition-all duration-500 opacity-0 translate-y-[-50px] pointer-events-none max-w-md w-full">
+        <div class="w-2 h-2 rounded-full bg-roseGold-500 animate-ping"></div>
+        <div class="flex-grow">
+            <span class="font-bold text-roseGold-200 block text-[10px]">New Atelier Request</span>
+            <span id="live-notification-text">Ticket received live.</span>
         </div>
-
-        <!-- Premium Navigation -->
-        <header class="bg-cream-50/80 backdrop-blur-xl border-b border-roseGold-100/60 h-24 flex items-center">
-            <div class="max-w-7xl mx-auto px-6 w-full flex items-center justify-between">
-                <div class="flex flex-col">
-                    <a href="#" class="font-serif text-2xl tracking-widest text-charcoal-900 font-600 uppercase">
-                        The Baking <span class="italic text-roseGold-600 font-400 lowercase">Studio</span>
-                    </a>
-                    <span class="text-[9px] uppercase tracking-[0.3em] text-gray-400 -mt-0.5">Haute Pâtisserie Ateliers</span>
-                </div>
-                <div class="flex items-center gap-4">
-                    <div id="auth-status-container" class="text-xs font-medium tracking-wider text-charcoal-800 flex items-center gap-2"></div>
-                    <button onclick="toggleAuthModal()" id="auth-gate-btn" class="border border-charcoal-900 px-4 py-2 rounded-xl text-xs font-semibold tracking-wider uppercase hover:bg-cream-100 transition-colors">
-                        Sign In / Track Order
-                    </button>
-                </div>
-            </div>
-        </header>
-
-        <!-- Main Workspace -->
-        <main class="max-w-7xl mx-auto px-6 py-12 flex-grow w-full overflow-y-auto">
-            <div id="client-view-pane" class="space-y-16">
-                <section class="text-center py-20 bg-cream-100 rounded-3xl border border-roseGold-100/40 px-4">
-                    <h1 class="font-serif text-4xl sm:text-6xl text-charcoal-900 font-500 tracking-tight mb-4">
-                        Cakes Crafted with <br><span class="italic text-roseGold-600 font-400">Couture Precision</span>
-                    </h1>
-                    <p class="text-xs text-gray-500 max-w-md mx-auto tracking-wide mb-6">Lahore & Karachi Private Confectionery Commissions.</p>
-                    <a href="#menu-anchor" class="bg-charcoal-900 text-cream-50 px-8 py-3.5 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-roseGold-700 transition-colors">View Seasonal Collection</a>
-                </section>
-
-                <section id="menu-anchor" class="space-y-8">
-                    <h2 class="font-serif text-3xl text-charcoal-900 font-500 text-center">Our Custom Formulations</h2>
-                    <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                        <div class="col-span-full text-center text-xs tracking-widest text-gray-400 py-12 animate-pulse">Presenting the current menu...</div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Administrative View Dashboard Component -->
-            <div id="admin-view-pane" class="hidden space-y-8">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-roseGold-200 pb-6">
-                    <div>
-                        <div class="flex items-center gap-3">
-                            <h2 class="font-serif text-3xl text-charcoal-900 font-500">Live Workspace Console</h2>
-                            <div id="admin-refresh-indicator" class="opacity-0 transition-opacity duration-300 flex items-center gap-1.5 text-xs text-roseGold-600 font-medium">
-                                <i data-lucide="refresh-cw" class="w-3.5 h-3.5 animate-spin"></i> Background Syncing...
-                            </div>
-                        </div>
-                        <p class="text-xs text-gray-500">Click any card to inspect full coordinate parameters and update pipeline states.</p>
-                    </div>
-                    <button onclick="logoutSession()" class="bg-charcoal-900 text-white px-5 py-2.5 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-roseGold-700 transition-colors self-start sm:self-auto">
-                        Exit Management View
-                    </button>
-                </div>
-
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between px-2">
-                        <h3 class="text-[10px] uppercase font-bold tracking-[0.2em] text-gray-400">Atelier Processing Queue</h3>
-                        <div class="text-[10px] text-emerald-600 font-semibold uppercase tracking-wider bg-emerald-50 px-2 py-0.5 rounded flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Streaming Channel Open
-                        </div>
-                    </div>
-                    <div id="admin-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="col-span-full text-center text-xs text-gray-400 py-12 italic">Syncing active registries...</div>
-                    </div>
-                </div>
-            </div>
-        </main>
-        
-        <footer class="bg-cream-100 border-t border-roseGold-200/50 py-8 text-center text-[10px] text-gray-400 tracking-[0.25em] uppercase mt-auto">
-            <p>The Baking Studio Atelier © 2026. Lahore • Karachi</p>
-        </footer>
+        <button onclick="closeNotificationBanner()" class="text-white/40 hover:text-white"><i data-lucide="x" class="w-4 h-4"></i></button>
     </div>
 
-    <!-- MODAL OVERLAYS LAYER (Checkout, Inspection, History, Auth) -->
-    <!-- Checkout Modal -->
+    <!-- Premium Header -->
+    <header class="sticky top-0 z-40 bg-cream-50/80 backdrop-blur-xl border-b border-roseGold-100/60">
+        <div class="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
+            <div class="flex flex-col">
+                <a href="#" class="font-serif text-2xl tracking-widest text-charcoal-900 font-600 uppercase">
+                    The Baking <span class="italic text-roseGold-600 font-400 lowercase">Studio</span>
+                </a>
+                <span class="text-[9px] uppercase tracking-[0.3em] text-gray-400 -mt-0.5">Haute Pâtisserie Ateliers</span>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <div id="auth-status-container" class="text-xs font-medium tracking-wider text-charcoal-800 flex items-center gap-2"></div>
+                <button onclick="toggleAuthModal()" id="auth-gate-btn" class="border border-charcoal-900 px-4 py-2 rounded-xl text-xs font-semibold tracking-wider uppercase hover:bg-cream-100 transition-colors">
+                    Sign In / Track Order
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-12 flex-grow w-full">
+        <!-- Client Menu View Component -->
+        <div id="client-view-pane" class="space-y-16">
+            <section class="text-center py-20 bg-cream-100 rounded-3xl border border-roseGold-100/40 px-4">
+                <h1 class="font-serif text-4xl sm:text-6xl text-charcoal-900 font-500 tracking-tight mb-4">
+                    Cakes Crafted with <br><span class="italic text-roseGold-600 font-400">Couture Precision</span>
+                </h1>
+                <p class="text-xs text-gray-500 max-w-md mx-auto tracking-wide mb-6">Lahore & Karachi Private Confectionery Commissions.</p>
+                <a href="#menu-anchor" class="bg-charcoal-900 text-cream-50 px-8 py-3.5 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-roseGold-700 transition-colors">View Seasonal Collection</a>
+            </section>
+
+            <section id="menu-anchor" class="space-y-8">
+                <h2 class="font-serif text-3xl text-charcoal-900 font-500 text-center">Our Custom Formulations</h2>
+                <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <div class="col-span-full text-center text-xs tracking-widest text-gray-400 py-12 animate-pulse">Presenting the current menu...</div>
+                </div>
+            </section>
+        </div>
+
+        <!-- High-End Administrative Dashboard Order Card Grid Component -->
+        <div id="admin-view-pane" class="hidden space-y-8">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-roseGold-200 pb-6">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <h2 class="font-serif text-3xl text-charcoal-900 font-500">Live Workspace Console</h2>
+                        <div id="admin-refresh-indicator" class="opacity-0 transition-opacity duration-300 flex items-center gap-1.5 text-xs text-roseGold-600 font-medium">
+                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5 animate-spin"></i> Background Syncing...
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500">Click any card to inspect full coordinate parameters and update pipeline states.</p>
+                </div>
+                <button onclick="logoutSession()" class="bg-charcoal-900 text-white px-5 py-2.5 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-roseGold-700 transition-colors self-start sm:self-auto">
+                    Exit Management View
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex items-center justify-between px-2">
+                    <h3 class="text-[10px] uppercase font-bold tracking-[0.2em] text-gray-400">Atelier Processing Queue</h3>
+                    <div class="text-[10px] text-emerald-600 font-semibold uppercase tracking-wider bg-emerald-50 px-2 py-0.5 rounded flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Streaming Channel Open
+                    </div>
+                </div>
+                <div id="admin-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="col-span-full text-center text-xs text-gray-400 py-12 italic">Syncing active registries...</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Interactive Checkout Dialog -->
     <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/60 backdrop-blur-md hidden">
         <div class="bg-cream-50 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-roseGold-200 flex flex-col max-h-[90vh]">
             <div class="p-6 border-b border-roseGold-100 flex justify-between items-center bg-cream-100">
                 <h3 id="modal-title" class="font-serif text-xl font-semibold">Customize Cake Options</h3>
                 <button onclick="closeModal()" class="text-charcoal-900 hover:opacity-50"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
+            
             <div class="p-6 overflow-y-auto space-y-4 text-xs">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
@@ -196,8 +174,10 @@
                         <select id="select-flavor" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none"></select>
                     </div>
                 </div>
+
                 <div class="h-px bg-roseGold-100 my-2"></div>
-                <h4 class="font-bold uppercase tracking-wider text-roseGold-700">Delivery Parameters</h4>
+                <h4 class="font-bold uppercase tracking-wider text-roseGold-700">Delivery Distribution Parameters</h4>
+                
                 <div class="space-y-3">
                     <div>
                         <label class="block text-gray-500 mb-1">Requested Delivery Date *</label>
@@ -213,10 +193,11 @@
                     </div>
                     <div>
                         <label class="block text-gray-500 mb-1">Complete Delivery Address *</label>
-                        <textarea id="order-address" rows="2" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none" placeholder="Street, Area, City"></textarea>
+                        <textarea id="order-address" rows="2" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none" placeholder="Street Name, House Number, City Area"></textarea>
                     </div>
                 </div>
             </div>
+
             <div class="p-6 bg-cream-100 border-t border-roseGold-100">
                 <button id="checkout-submit-btn" onclick="submitOrderPipeline()" class="w-full bg-charcoal-900 text-cream-50 py-3.5 rounded-xl font-semibold tracking-wider uppercase hover:bg-roseGold-700 transition-colors disabled:opacity-50">
                     Confirm Order Reservation
@@ -225,17 +206,19 @@
         </div>
     </div>
 
-    <!-- Success Invoice Statement Modal -->
+    <!-- Enhanced Invoice Verification & Payment Receipt Modal -->
     <div id="receipt-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/60 backdrop-blur-md hidden">
         <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border border-roseGold-200 p-6 text-center space-y-4 max-h-[95vh] overflow-y-auto">
             <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-sm">
                 <i data-lucide="receipt" class="w-5 h-5"></i>
             </div>
+            
             <div class="space-y-1">
                 <span class="text-[10px] uppercase font-bold text-roseGold-600 tracking-widest">Order Logged Successfully</span>
                 <h3 class="font-serif text-xl text-charcoal-900">Your Booking Statement</h3>
                 <div class="bg-cream-100 px-3 py-1.5 rounded-xl inline-block font-mono text-xs font-bold text-charcoal-900 border border-roseGold-200 mt-1" id="receipt-ticket-label">---</div>
             </div>
+
             <div class="bg-cream-50 rounded-xl p-4 text-left border border-roseGold-100 text-xs space-y-2.5">
                 <p class="font-bold text-charcoal-900 uppercase tracking-wide border-b border-roseGold-200/60 pb-1.5 text-center text-[10px]">Itemized Configuration</p>
                 <div class="space-y-1 text-gray-600">
@@ -248,18 +231,23 @@
                     <span id="invoice-cake-price" class="text-roseGold-700">PKR 0</span>
                 </div>
             </div>
+
             <div class="bg-cream-50 rounded-xl p-4 text-left border border-roseGold-100 text-xs space-y-2">
                 <p class="font-bold text-charcoal-900 text-center uppercase tracking-wide border-b border-roseGold-200 pb-1.5 text-center text-[10px]">JazzCash Transaction Routing</p>
                 <p class="flex justify-between"><span>Account Target:</span> <strong>JazzCash Wallet</strong></p>
                 <p class="flex justify-between"><span>Mobile Recipient:</span> <strong class="text-roseGold-700 font-mono">03001311047</strong></p>
+                <div class="text-[9px] text-gray-400 leading-relaxed bg-white border p-3 rounded-xl border-roseGold-100 mt-2">
+                    Kindly complete the transfer via JazzCash, take a screenshot of the receipt, and attach it when using the WhatsApp dispatcher channel link underneath.
+                </div>
             </div>
+
             <button onclick="dispatchWhatsAppReceipt()" class="w-full bg-emerald-600 text-white py-3.5 rounded-xl text-xs font-semibold tracking-widest uppercase hover:bg-emerald-700 transition-all flex items-center justify-center gap-2">
                 <i data-lucide="send" class="w-4 h-4"></i> Copy & Go to WhatsApp
             </button>
         </div>
     </div>
 
-    <!-- Admin Inspect Modal -->
+    <!-- Administrative Order Inspection Panel Modal -->
     <div id="admin-inspect-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/60 backdrop-blur-md hidden">
         <div class="bg-cream-50 rounded-2xl max-w-md w-full overflow-hidden shadow-2xl border border-roseGold-200 flex flex-col">
             <div class="p-5 border-b border-roseGold-100 flex justify-between items-center bg-cream-100">
@@ -281,17 +269,20 @@
                         <div id="inspect-username" class="font-mono bg-cream-50 px-2 py-1 rounded border inline-block mt-0.5 text-gray-600">--</div>
                     </div>
                 </div>
+
                 <div class="bg-white p-4 rounded-xl border border-roseGold-100 space-y-2">
                     <span class="text-[10px] text-gray-400 uppercase font-bold block">Bake Pipeline Specifications</span>
                     <div class="text-sm font-semibold text-charcoal-900" id="inspect-cake">--</div>
                     <div class="text-gray-600 flex justify-between"><span>Weight Vol:</span> <strong id="inspect-weight" class="text-charcoal-900">--</strong></div>
                     <div class="text-gray-600 flex justify-between"><span>Flavor Base:</span> <strong id="inspect-flavor" class="text-charcoal-900">--</strong></div>
                 </div>
+
                 <div class="bg-white p-4 rounded-xl border border-roseGold-100 space-y-1.5">
                     <span class="text-[10px] text-gray-400 uppercase font-bold block">Delivery Target window</span>
                     <div class="text-charcoal-900 font-semibold flex items-center gap-1"><i data-lucide="calendar" class="w-3.5 h-3.5 text-roseGold-600"></i> <span id="inspect-date">--</span></div>
                     <div class="text-gray-500 font-light leading-relaxed bg-cream-50/50 border p-2 rounded-lg mt-1 whitespace-pre-wrap" id="inspect-address">--</div>
                 </div>
+
                 <div class="bg-cream-100 border border-roseGold-200 rounded-xl p-4 space-y-2">
                     <span class="text-[10px] text-charcoal-800 uppercase font-bold block text-center tracking-wider">Update Order Pipeline Tracking Queue</span>
                     <div class="grid grid-cols-3 gap-2 text-[10px] uppercase font-bold tracking-wide">
@@ -304,14 +295,16 @@
         </div>
     </div>
 
-    <!-- Account History Panel Drawer -->
+    <!-- Extended Account Details Drawer -->
     <div id="settings-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/60 backdrop-blur-md hidden">
         <div class="bg-cream-50 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-roseGold-200 flex flex-col max-h-[92vh]">
             <div class="p-5 border-b border-roseGold-100 flex justify-between items-center bg-cream-100">
                 <h3 class="font-serif text-lg font-semibold">My Atelier Hub & Order History</h3>
                 <button onclick="window.toggleSettingsModal()" class="text-charcoal-900 opacity-50"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
+            
             <div class="p-6 overflow-y-auto space-y-6 text-xs">
+                <!-- Profile Identity Fields -->
                 <div class="space-y-3 bg-white p-4 rounded-xl border border-roseGold-100" id="settings-profile-fields-block">
                     <h4 class="font-bold uppercase tracking-wider text-roseGold-700 mb-1 text-[10px]">Delivery Identity Card</h4>
                     <div class="grid grid-cols-2 gap-3">
@@ -332,21 +325,25 @@
                         Update Account Details
                     </button>
                 </div>
+
                 <div class="space-y-3">
-                    <h4 class="font-bold uppercase tracking-wider text-charcoal-900 text-[10px] flex items-center gap-1.5"><i data-lucide="clock" class="w-3.5 h-3.5 text-roseGold-600"></i> Track My Placed Orders</h4>
+                    <h4 class="font-bold uppercase tracking-wider text-charcoal-900 text-[10px] flex items-center gap-1.5">
+                        <i data-lucide="clock" class="w-3.5 h-3.5 text-roseGold-600"></i> Track My Placed Orders
+                    </h4>
                     <div id="user-orders-timeline" class="space-y-3 max-h-[35vh] overflow-y-auto pr-1"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Auth Modal -->
+    <!-- Registration Gateway Dialog -->
     <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/60 backdrop-blur-md hidden">
         <div class="bg-cream-50 rounded-2xl max-w-md w-full overflow-hidden shadow-2xl border border-roseGold-200 p-6 space-y-4">
             <div class="flex justify-between items-center border-b border-roseGold-100 pb-3">
                 <h3 class="font-serif text-lg font-semibold" id="auth-modal-title">Access Atelier Profile</h3>
                 <button onclick="toggleAuthModal()" class="text-charcoal-900 opacity-50"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
+            
             <div class="space-y-3 text-xs">
                 <div id="auth-main-inputs">
                     <div>
@@ -358,6 +355,7 @@
                         <input type="password" id="auth-password" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none">
                     </div>
                 </div>
+                
                 <div id="auth-extended-fields" class="hidden space-y-3">
                     <div>
                         <label class="block font-bold text-gray-500 mb-1">Full Display Name</label>
@@ -372,23 +370,45 @@
                         <textarea id="auth-address" rows="2" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none"></textarea>
                     </div>
                 </div>
+
                 <div id="auth-guest-track-fields" class="hidden">
                     <label class="block font-bold text-gray-500 mb-1">Enter Order Ticket ID</label>
                     <input type="text" id="auth-guest-ticket-input" class="w-full bg-white border border-roseGold-200 rounded-xl p-3 focus:outline-none" placeholder="e.g. 130726015">
                 </div>
+
                 <div class="pt-2 flex flex-col gap-2">
-                    <button id="auth-submit-main-btn" onclick="processAuthSubmission()" class="w-full bg-charcoal-900 text-cream-50 py-3 rounded-xl text-xs font-semibold tracking-wider uppercase hover:bg-roseGold-700 transition-colors">Continue</button>
-                    <button onclick="toggleAuthMode()" id="auth-toggle-mode-btn" class="w-full text-center text-roseGold-700 font-medium hover:underline pt-1 text-[11px]">Create an Atelier Account Card</button>
+                    <button id="auth-submit-main-btn" onclick="processAuthSubmission()" class="w-full bg-charcoal-900 text-cream-50 py-3 rounded-xl text-xs font-semibold tracking-wider uppercase hover:bg-roseGold-700 transition-colors">
+                        Continue
+                    </button>
+                    <button onclick="toggleAuthMode()" id="auth-toggle-mode-btn" class="w-full text-center text-roseGold-700 font-medium hover:underline pt-1 text-[11px]">
+                        Create an Atelier Account Card
+                    </button>
                     <div class="h-px bg-roseGold-100 my-1" id="auth-divider"></div>
-                    <button onclick="toggleGuestTrackMode()" id="auth-guest-toggle-btn" class="w-full text-center text-gray-500 hover:text-charcoal-900 font-medium text-[11px]">Track Guest Order Ticket</button>
+                    <button onclick="toggleGuestTrackMode()" id="auth-guest-toggle-btn" class="w-full text-center text-gray-500 hover:text-charcoal-900 font-medium text-[11px]">
+                        Track Guest Order Ticket
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Master Controller Core Engine Scripts Setup -->
+    <!-- Alert Toast -->
+    <div id="global-toast" class="fixed bottom-6 right-6 z-50 bg-charcoal-900 text-cream-50 text-xs font-medium tracking-widest uppercase px-6 py-4 rounded-xl shadow-2xl opacity-0 translate-y-10 transition-all duration-300 pointer-events-none">
+        System Action Validated.
+    </div>
+
+    <!-- Application Script Engine Routing Modules -->
     <script type="module">
         import { createClient } from 'https://esm.sh/@sanity/client@6.15.0';
+
+        // 1. Core Service Worker Registration Block using Relative Subfolder Parameters
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./OneSignalSDKWorker.js', { scope: './' })
+                    .then(reg => console.log('Service worker tracking active scope:', reg.scope))
+                    .catch(err => console.error('PWA service worker deployment exception:', err));
+            });
+        }
 
         const SANITY_CONFIG = {
             projectId: 't7g7grwf',
@@ -412,88 +432,47 @@
         let newlyGeneratedTicketCache = "";
         let adminSubscriptionHook = null;
         let existingTicketsRegistryCache = []; 
-        let deferredPrompt = null; 
+        let interceptedPWAInstallPrompt = null; 
 
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             loadEditorialMenu();
             checkLocalSessionState();
-            checkPWAInstallationStatus();
-            setupPWAInstallListeners();
+            setupPWABeforeInstallListener(); 
         });
 
-        // --- PWA Multi-Platform Environment Evaluator Framework ---
-        function checkPWAInstallationStatus() {
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-            
-            if (isStandalone) {
-                document.getElementById('gateway-view').classList.add('hidden');
-                document.getElementById('dashboard-view').classList.remove('hidden');
-                document.getElementById('dashboard-view').classList.add('flex');
-            } else {
-                document.getElementById('gateway-view').classList.remove('hidden');
-                document.getElementById('dashboard-view').classList.add('hidden');
-                detectPlatformInstructions();
-            }
-        }
-
-        function setupPWAInstallListeners() {
+        // --- PWA Custom App Installation Intercept Logic Loops ---
+        function setupPWABeforeInstallListener() {
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
-                deferredPrompt = e;
-            });
-
-            document.getElementById('btn-install-pwa').addEventListener('click', async () => {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    const { outcome } = await deferredPrompt.userChoice;
-                    console.log(`User choice: ${outcome}`);
-                    deferredPrompt = null;
+                interceptedPWAInstallPrompt = e;
+                
+                // Expose our hidden luxury system installation element banner at the top
+                const banner = document.getElementById('top-pwa-install-banner');
+                if (banner) {
+                    banner.classList.remove('hidden');
+                    banner.classList.add('flex');
                 }
-                document.getElementById('gateway-install-card').classList.add('opacity-0', 'scale-95');
-                setTimeout(() => {
-                    document.getElementById('gateway-install-card').classList.add('hidden');
-                    document.getElementById('gateway-onboarding-card').classList.remove('hidden');
-                    document.getElementById('gateway-onboarding-card').classList.add('opacity-100', 'scale-100');
-                }, 300);
-            });
 
-            window.addEventListener('appinstalled', () => {
-                triggerNotificationToast("Studio App Synced successfully! Loading workspace...");
-                setTimeout(() => { location.reload(); }, 1500);
+                document.getElementById('top-pwa-native-install-btn').onclick = async () => {
+                    if (!interceptedPWAInstallPrompt) return;
+                    banner.classList.add('hidden');
+                    banner.classList.remove('flex');
+                    interceptedPWAInstallPrompt.prompt(); 
+                    const result = await interceptedPWAInstallPrompt.userChoice;
+                    console.log(`User choice resolution: ${result.outcome}`);
+                    interceptedPWAInstallPrompt = null;
+                };
             });
         }
 
-        function detectPlatformInstructions() {
-            const ua = window.navigator.userAgent;
-            const title = document.getElementById('platform-title');
-            const inst = document.getElementById('platform-instructions');
+        window.dismissTopInstallBanner = function() {
+            const banner = document.getElementById('top-pwa-install-banner');
+            banner.classList.add('hidden');
+            banner.classList.remove('flex');
+        };
 
-            if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
-                title.innerHTML = `🌟 Apple iOS Safari Manual Actions`;
-                inst.innerHTML = `
-                    <p>1. Tap the <strong>Share</strong> button in Safari's bottom interface toolbar.</p>
-                    <p>2. Scroll the operational utility list and select <strong>"Add to Home Screen"</strong>.</p>
-                    <p>3. Confirm your descriptive name asset mapping and tap "Add" at the top right.</p>
-                `;
-            } else if (/Android/i.test(ua)) {
-                title.innerHTML = `🌟 Google Android System Guidelines`;
-                inst.innerHTML = `
-                    <p>1. Click the primary "Install Studio Space" button above.</p>
-                    <p>2. Alternatively, open your browser configuration settings menu (three dots icon).</p>
-                    <p>3. Click <strong>"Install App"</strong> to establish standalone operations natively.</p>
-                `;
-            } else {
-                title.innerHTML = `🌟 Desktop Standalone Protocol Requirements`;
-                inst.innerHTML = `
-                    <p>1. Tap the direct "Install Studio Space" validation selector above.</p>
-                    <p>2. Or catch the direct download chevron marker pointing down inside the Chrome URL address bar segment.</p>
-                    <p>3. Authorize the installation overlay card to isolate execution containers completely.</p>
-                `;
-            }
-        }
-
-        // --- Profile Account Control Settings Functions ---
+        // --- Profile Account Control Settings System Functions ---
         window.toggleSettingsModal = function() {
             const modal = document.getElementById('settings-modal');
             if(modal.classList.contains('hidden')) {
@@ -515,16 +494,23 @@
         async function renderUserOrderTimeline() {
             const historyBox = document.getElementById('user-orders-timeline');
             if(!cachedUserSession || cachedUserSession.isAdmin) return;
-            historyBox.innerHTML = `<div class="text-center text-gray-400 py-4 animate-pulse">Syncing statement logs...</div>`;
+            historyBox.innerHTML = `<div class="text-center text-gray-400 py-4 animate-pulse">Syncing purchase statement logs...</div>`;
 
             try {
-                let query = cachedUserSession.isAnonymousGuest 
-                    ? `*[_type == "order" && ticketId in $tickets] | order(_createdAt desc)`
-                    : `*[_type == "order" && usernameRef == $usr] | order(_createdAt desc)`;
-                let params = cachedUserSession.isAnonymousGuest ? { tickets: cachedUserSession.guestTickets || [] } : { usr: cachedUserSession.username };
+                let query = "";
+                let params = {};
+
+                if (cachedUserSession.isAnonymousGuest) {
+                    query = `*[_type == "order" && ticketId in $tickets] | order(_createdAt desc)`;
+                    params = { tickets: cachedUserSession.guestTickets || [] };
+                } else {
+                    query = `*[_type == "order" && usernameRef == $usr] | order(_createdAt desc)`;
+                    params = { usr: cachedUserSession.username };
+                }
 
                 const clientOrders = await client.fetch(query, params);
                 historyBox.innerHTML = '';
+                
                 if(!clientOrders || clientOrders.length === 0) {
                     historyBox.innerHTML = `<p class="text-gray-400 italic text-center py-4 bg-white rounded-xl border border-dashed border-roseGold-200">No current invoice tickets located.</p>`;
                     return;
@@ -533,6 +519,7 @@
                 clientOrders.forEach(ord => {
                     const row = document.createElement('div');
                     row.className = "bg-white p-3.5 rounded-xl border border-roseGold-100 flex justify-between items-center shadow-xs";
+                    
                     let statusColor = "text-amber-600 bg-amber-50 border-amber-200";
                     if(ord.status === 'Payment Confirmed') statusColor = "text-blue-600 bg-blue-50 border-blue-200";
                     if(ord.status === 'Baking In Progress') statusColor = "text-purple-600 bg-purple-50 border-purple-200";
@@ -544,12 +531,14 @@
                             <div class="font-medium text-gray-700 mt-0.5">${ord.cakeTitle}</div>
                             <div class="text-[10px] text-gray-400 font-light">${ord.weight} / Due: ${ord.deliveryDate}</div>
                         </div>
-                        <span class="px-2 py-0.5 border text-[9px] font-semibold rounded-full uppercase tracking-wide ${statusColor}">${ord.status}</span>
+                        <span class="px-2 py-0.5 border text-[9px] font-semibold rounded-full uppercase tracking-wide ${statusColor}">
+                            ${ord.status}
+                        </span>
                     `;
                     historyBox.appendChild(row);
                 });
             } catch(e) {
-                historyBox.innerHTML = `<p class="text-red-700 text-center py-2">Failed to sync operational history logs.</p>`;
+                historyBox.innerHTML = `<p class="text-red-700 text-center py-2">Failed to synchronize operational logs.</p>`;
             }
         }
 
@@ -558,100 +547,238 @@
             const phone = document.getElementById('settings-phone').value.trim();
             const address = document.getElementById('settings-address').value.trim();
             const saveBtn = document.getElementById('settings-save-btn');
-            if(!name) { triggerNotificationToast("Identity parameters required."); return; }
+
+            if(!name) {
+                triggerNotificationToast("Identity name parameters required.");
+                return;
+            }
 
             saveBtn.disabled = true;
             saveBtn.innerText = "Saving Profile Configurations...";
 
             try {
-                await client.patch(cachedUserSession._id).set({ fullName: name, savedPhone: phone, savedAddress: address }).commit();
-                cachedUserSession.fullName = name; cachedUserSession.savedPhone = phone; cachedUserSession.savedAddress = address;
+                await client.patch(cachedUserSession._id)
+                    .set({ fullName: name, savedPhone: phone, savedAddress: address })
+                    .commit();
+
+                cachedUserSession.fullName = name;
+                cachedUserSession.savedPhone = phone;
+                cachedUserSession.savedAddress = address;
                 localStorage.setItem('studio_session', JSON.stringify(cachedUserSession));
-                executeSessionUIRendering(); window.toggleSettingsModal(); triggerNotificationToast("Account data successfully updated.");
+
+                executeSessionUIRendering();
+                window.toggleSettingsModal();
+                triggerNotificationToast("Account parameters updated cleanly.");
             } catch(e) {
-                triggerNotificationToast("Serialization error.");
+                console.error(e);
+                triggerNotificationToast("Failed to serialize account modifications.");
             } finally {
-                saveBtn.disabled = false; saveBtn.innerText = "Update Account Details";
+                saveBtn.disabled = false;
+                saveBtn.innerText = "Update Account Details";
             }
         };
 
         // --- Identity Authorization Gateway Portal Controller ---
-        window.toggleAuthModal = function() { document.getElementById('auth-modal').classList.toggle('hidden'); };
+        window.toggleAuthModal = function() {
+            document.getElementById('auth-modal').classList.toggle('hidden');
+        };
+
         window.toggleGuestTrackMode = function() {
-            isGuestTrackMode = !isGuestTrackMode; isRegisterMode = false;
-            const title = document.getElementById('auth-modal-title'), mainInputs = document.getElementById('auth-main-inputs'), guestFields = document.getElementById('auth-guest-track-fields'), extendedFields = document.getElementById('auth-extended-fields'), toggleModeBtn = document.getElementById('auth-toggle-mode-btn'), guestToggleBtn = document.getElementById('auth-guest-toggle-btn');
+            isGuestTrackMode = !isGuestTrackMode;
+            isRegisterMode = false;
+
+            const title = document.getElementById('auth-modal-title');
+            const mainInputs = document.getElementById('auth-main-inputs');
+            const guestFields = document.getElementById('auth-guest-track-fields');
+            const extendedFields = document.getElementById('auth-extended-fields');
+            const toggleModeBtn = document.getElementById('auth-toggle-mode-btn');
+            const guestToggleBtn = document.getElementById('auth-guest-toggle-btn');
+
             if(isGuestTrackMode) {
-                title.innerText = "Track Anonymous Order Ticket"; mainInputs.classList.add('hidden'); extendedFields.classList.add('hidden'); guestFields.classList.remove('hidden'); toggleModeBtn.classList.add('hidden'); guestToggleBtn.innerText = "Return to Account Sign In";
+                title.innerText = "Track Anonymous Order Ticket";
+                mainInputs.classList.add('hidden');
+                extendedFields.classList.add('hidden');
+                guestFields.classList.remove('hidden');
+                toggleModeBtn.classList.add('hidden');
+                guestToggleBtn.innerText = "Return to Account Sign In";
             } else {
-                title.innerText = "Access Atelier Profile"; mainInputs.classList.remove('hidden'); guestFields.classList.add('hidden'); toggleModeBtn.classList.remove('hidden'); toggleModeBtn.innerText = "Create an Atelier Account Card"; guestToggleBtn.innerText = "Track Guest Order Ticket";
+                title.innerText = "Access Atelier Profile";
+                mainInputs.classList.remove('hidden');
+                guestFields.classList.add('hidden');
+                toggleModeBtn.classList.remove('hidden');
+                toggleModeBtn.innerText = "Create an Atelier Account Card";
+                guestToggleBtn.innerText = "Track Guest Order Ticket";
             }
         };
 
         window.toggleAuthMode = function() {
-            isRegisterMode = !isRegisterMode; isGuestTrackMode = false;
-            const title = document.getElementById('auth-modal-title'), extendedFields = document.getElementById('auth-extended-fields'), toggleBtn = document.getElementById('auth-toggle-mode-btn'), passwordBlock = document.getElementById('auth-password-block');
+            isRegisterMode = !isRegisterMode;
+            isGuestTrackMode = false;
+            const title = document.getElementById('auth-modal-title');
+            const extendedFields = document.getElementById('auth-extended-fields');
+            const toggleBtn = document.getElementById('auth-toggle-mode-btn');
+            const passwordBlock = document.getElementById('auth-password-block');
+
             if (isRegisterMode) {
-                title.innerText = "Create Atelier Account Card"; extendedFields.classList.remove('hidden'); passwordBlock.classList.remove('hidden'); toggleBtn.innerText = "Return to Profile Sign In";
+                title.innerText = "Create Atelier Account Card";
+                extendedFields.classList.remove('hidden');
+                passwordBlock.classList.remove('hidden');
+                toggleBtn.innerText = "Return to Profile Sign In";
             } else {
-                title.innerText = "Access Atelier Profile"; extendedFields.classList.add('hidden'); passwordBlock.classList.remove('hidden'); toggleBtn.innerText = "Create an Atelier Account Card";
+                title.innerText = "Access Atelier Profile";
+                extendedFields.classList.add('hidden');
+                passwordBlock.classList.remove('hidden');
+                toggleBtn.innerText = "Create an Atelier Account Card";
             }
         };
 
         window.processAuthSubmission = async function() {
             if (isGuestTrackMode) {
                 const targetTicket = document.getElementById('auth-guest-ticket-input').value.trim();
-                if(!targetTicket) { triggerNotificationToast("Provide your order invoice ticket code."); return; }
+                if(!targetTicket) {
+                    triggerNotificationToast("Provide your order invoice ticket code.");
+                    return;
+                }
+
                 try {
                     const orderExists = await client.fetch(`*[_type == "order" && ticketId == $tkt][0]`, { tkt: targetTicket });
-                    if(!orderExists) { triggerNotificationToast("Ticket code cannot be validated."); return; }
-                    cachedUserSession = { username: 'guest_pass', fullName: 'Guest Tracker Pass', isAnonymousGuest: true, guestTickets: [targetTicket] };
+                    if(!orderExists) {
+                        triggerNotificationToast("Ticket ID code cannot be validated.");
+                        return;
+                    }
+
+                    cachedUserSession = {
+                        username: 'guest_pass',
+                        fullName: 'Guest Order Tracker',
+                        isAnonymousGuest: true,
+                        guestTickets: [targetTicket]
+                    };
+                    
                     localStorage.setItem('studio_session', JSON.stringify(cachedUserSession));
-                    executeSessionUIRendering(); window.toggleAuthModal(); window.toggleSettingsModal(); 
-                } catch(err) { triggerNotificationToast("Server lookup exception."); }
+                    executeSessionUIRendering();
+                    window.toggleAuthModal();
+                    window.toggleSettingsModal(); 
+                } catch(err) {
+                    triggerNotificationToast("Server error during ticket lookups.");
+                }
                 return;
             }
 
             const userIn = document.getElementById('auth-username').value.trim();
             const passIn = document.getElementById('auth-password').value.trim();
-            if(!userIn || !passIn) { triggerNotificationToast("Complete credential verification fields."); return; }
+
+            if(!userIn || !passIn) {
+                triggerNotificationToast("Complete credential verification parameters.");
+                return;
+            }
 
             if(isRegisterMode) {
-                const nameIn = document.getElementById('auth-fullname').value.trim(), phoneIn = document.getElementById('auth-phone').value.trim(), addressIn = document.getElementById('auth-address').value.trim();
+                const nameIn = document.getElementById('auth-fullname').value.trim();
+                const phoneIn = document.getElementById('auth-phone').value.trim();
+                const addressIn = document.getElementById('auth-address').value.trim();
+
                 try {
                     const checkExist = await client.fetch(`*[_type == "studioUser" && username == $usr][0]`, { usr: userIn });
-                    if(checkExist) { triggerNotificationToast("Username token variant already allocated."); return; }
-                    const createdUser = await client.create({ _type: 'studioUser', username: userIn, password: passIn, fullName: nameIn || userIn, savedPhone: phoneIn || '', savedAddress: addressIn || '', isAdmin: false });
-                    triggerNotificationToast("Card profile activated."); cachedUserSession = createdUser; localStorage.setItem('studio_session', JSON.stringify(cachedUserSession)); executeSessionUIRendering(); window.toggleAuthModal();
-                } catch (err) { triggerNotificationToast("Registration fault."); }
+                    if(checkExist) {
+                        triggerNotificationToast("Username selection token already allocated.");
+                        return;
+                    }
+
+                    const createdUser = await client.create({
+                        _type: 'studioUser',
+                        username: userIn,
+                        password: passIn,
+                        fullName: nameIn || userIn,
+                        savedPhone: phoneIn || '',
+                        savedAddress: addressIn || '',
+                        isAdmin: false
+                    });
+
+                    triggerNotificationToast("Card profile activated.");
+                    cachedUserSession = createdUser;
+                    localStorage.setItem('studio_session', JSON.stringify(cachedUserSession));
+                    executeSessionUIRendering();
+                    window.toggleAuthModal();
+                } catch (err) {
+                    triggerNotificationToast("Registration error encountered.");
+                }
             } else {
                 try {
                     const matchedUser = await client.fetch(`*[_type == "studioUser" && username == $usr && password == $pwd][0]`, { usr: userIn, pwd: passIn });
-                    if(!matchedUser) { triggerNotificationToast("Invalid configuration match coordinates."); return; }
-                    cachedUserSession = matchedUser; localStorage.setItem('studio_session', JSON.stringify(cachedUserSession)); executeSessionUIRendering(); window.toggleAuthModal();
-                    if(matchedUser.isAdmin) triggerNotificationToast("Workspace manager active."); else triggerNotificationToast("Profile unlocked.");
-                } catch(e) { triggerNotificationToast("Profile synchronization lookups failure."); }
+                    
+                    if(!matchedUser) {
+                        triggerNotificationToast("Invalid credentials verification match.");
+                        return;
+                    }
+                    
+                    cachedUserSession = matchedUser;
+                    localStorage.setItem('studio_session', JSON.stringify(cachedUserSession));
+                    executeSessionUIRendering();
+                    window.toggleAuthModal();
+                    
+                    if(matchedUser.isAdmin) {
+                        triggerNotificationToast("Management console workspace unlocked.");
+                    } else {
+                        triggerNotificationToast("Welcome back to the studio.");
+                    }
+                } catch(e) {
+                    triggerNotificationToast("Profile tracking lookup server error.");
+                }
             }
         };
 
         window.logoutSession = function() {
-            cachedUserSession = null; localStorage.removeItem('studio_session');
-            if(adminSubscriptionHook) { adminSubscriptionHook.unsubscribe(); adminSubscriptionHook = null; }
-            executeSessionUIRendering(); triggerNotificationToast("Logged out clean.");
+            cachedUserSession = null;
+            localStorage.removeItem('studio_session');
+            
+            if(adminSubscriptionHook) {
+                adminSubscriptionHook.unsubscribe();
+                adminSubscriptionHook = null;
+            }
+
+            executeSessionUIRendering();
+            triggerNotificationToast("Logged out successfully.");
         };
 
         function checkLocalSessionState() {
             const saved = localStorage.getItem('studio_session');
-            if(saved) { cachedUserSession = JSON.parse(saved); executeSessionUIRendering(); }
+            if(saved) {
+                cachedUserSession = JSON.parse(saved);
+                executeSessionUIRendering();
+            }
         }
 
         function executeSessionUIRendering() {
-            const statusBox = document.getElementById('auth-status-container'), gateBtn = document.getElementById('auth-gate-btn'), clientPane = document.getElementById('client-view-pane'), adminPane = document.getElementById('admin-view-pane');
+            const statusBox = document.getElementById('auth-status-container');
+            const gateBtn = document.getElementById('auth-gate-btn');
+            const clientPane = document.getElementById('client-view-pane');
+            const adminPane = document.getElementById('admin-view-pane');
+
             if(cachedUserSession) {
                 gateBtn.classList.add('hidden');
-                statusBox.innerHTML = `<div class="flex items-center gap-3"><button onclick="window.toggleSettingsModal()" class="bg-roseGold-100 px-3 py-1.5 rounded-full text-[11px] font-semibold text-charcoal-900 border border-roseGold-200 hover:bg-roseGold-200/40 transition-all">✨ ${cachedUserSession.fullName} ${cachedUserSession.isAdmin ? '(Manager Board)' : ''}</button><button onclick="logoutSession()" class="text-roseGold-700 hover:underline text-[11px] font-semibold">Sign Out</button></div>`;
-                if(cachedUserSession.isAdmin) { clientPane.classList.add('hidden'); adminPane.classList.remove('hidden'); loadAdminDashboard(false, true); setupLiveAdminStream(); } else { clientPane.classList.remove('hidden'); adminPane.classList.add('hidden'); }
+                statusBox.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <button onclick="window.toggleSettingsModal()" class="bg-roseGold-100 px-3 py-1.5 rounded-full text-[11px] font-semibold text-charcoal-900 border border-roseGold-200 hover:bg-roseGold-200/40 transition-colors">
+                            ✨ ${cachedUserSession.fullName} ${cachedUserSession.isAdmin ? '(Atelier Console Open)' : '(My Hub / History)'}
+                        </button>
+                        <button onclick="logoutSession()" class="text-roseGold-700 hover:underline text-[11px] font-semibold">Sign Out</button>
+                    </div>
+                `;
+
+                if(cachedUserSession.isAdmin) {
+                    clientPane.classList.add('hidden');
+                    adminPane.classList.remove('hidden');
+                    loadAdminDashboard(false, true); 
+                    setupLiveAdminStream(); 
+                } else {
+                    clientPane.classList.remove('hidden');
+                    adminPane.classList.add('hidden');
+                }
             } else {
-                gateBtn.classList.remove('hidden'); statusBox.innerHTML = ''; clientPane.classList.remove('hidden'); adminPane.classList.add('hidden');
+                gateBtn.classList.remove('hidden');
+                statusBox.innerHTML = '';
+                clientPane.classList.remove('hidden');
+                adminPane.classList.add('hidden');
             }
             lucide.createIcons();
         }
@@ -659,150 +786,380 @@
         // --- Storefront Menu Presentation Layers ---
         async function loadEditorialMenu() {
             const grid = document.getElementById('product-grid');
+            const query = `*[_type == "product"]{ _id, title, image, basePrice, weights, flavors }`;
+
             try {
-                const bakes = await client.fetch(`*[_type == "product"]{ _id, title, image, basePrice, weights, flavors }`);
+                const bakes = await client.fetch(query);
                 grid.innerHTML = '';
-                if(!bakes || bakes.length === 0) { grid.innerHTML = `<div class="col-span-full py-12 border border-dashed border-roseGold-200 rounded-2xl text-center text-xs text-gray-400">Atelier menu schema repository is empty.</div>`; return; }
+
+                if(!bakes || bakes.length === 0) {
+                    grid.innerHTML = `<div class="col-span-full py-12 border border-dashed border-roseGold-200 rounded-2xl text-center text-xs text-gray-400">Atelier menu tracking system is currently empty.</div>`;
+                    return;
+                }
+
                 bakes.forEach(bake => {
                     let url = 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=600';
                     if (bake.image && bake.image.asset && bake.image.asset._ref) {
                         const [, id, dims, ext] = bake.image.asset._ref.split('-');
                         url = `https://cdn.sanity.io/images/${SANITY_CONFIG.projectId}/${SANITY_CONFIG.dataset}/${id}-${dims}.${ext}`;
                     }
+
                     const card = document.createElement('div');
                     card.className = "bg-white border border-roseGold-100/60 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col group transform hover:-translate-y-1";
-                    card.innerHTML = `<div class="h-64 bg-cream-100 overflow-hidden relative"><img src="${url}" alt="${bake.title}" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000"></div><div class="p-6 flex flex-col flex-grow justify-between space-y-4"><div class="space-y-1 text-center"><h3 class="font-serif text-lg text-charcoal-900 font-500">${bake.title}</h3><p class="text-xs font-semibold text-roseGold-700 uppercase">PKR ${Number(bake.basePrice).toLocaleString()}</p></div><button class="w-full border border-charcoal-900 text-charcoal-900 group-hover:bg-charcoal-900 group-hover:text-cream-50 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase transition-all duration-300">Place Order</button></div>`;
-                    card.querySelector('button').onclick = () => openOrderModal(bake, url); grid.appendChild(card);
+                    card.innerHTML = `
+                        <div class="h-64 bg-cream-100 overflow-hidden relative">
+                            <img src="${url}" alt="${bake.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000">
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow justify-between space-y-4">
+                            <div class="space-y-1 text-center">
+                                <h3 class="font-serif text-lg text-charcoal-900 font-500">${bake.title}</h3>
+                                <p class="text-xs font-semibold text-roseGold-700 uppercase">PKR ${Number(bake.basePrice).toLocaleString()}</p>
+                            </div>
+                            <button class="w-full border border-charcoal-900 text-charcoal-900 group-hover:bg-charcoal-900 group-hover:text-cream-50 py-3 rounded-xl text-xs font-semibold tracking-widest uppercase transition-all duration-300">
+                                Place Order
+                            </button>
+                        </div>
+                    `;
+                    card.querySelector('button').onclick = () => openOrderModal(bake, url);
+                    grid.appendChild(card);
                 });
-            } catch(e) { grid.innerHTML = `<div class="col-span-full text-center text-xs text-red-700 py-12">Database handshake connection interruption error.</div>`; }
+            } catch(e) {
+                grid.innerHTML = `<div class="col-span-full text-center text-xs text-red-700 py-12">Database communication interface fault. Check server logs.</div>`;
+            }
         }
 
         function openOrderModal(bake, imageUrl) {
-            activeProductContext = { ...bake, imageUrl }; document.getElementById('modal-title').innerText = bake.title;
+            activeProductContext = { ...bake, imageUrl };
+            document.getElementById('modal-title').innerText = bake.title;
             populateDropdownOpts('select-weight', bake.weights, ['2 Lbs (Standard Single Tier)', '4 Lbs (Two Tier)', '6 Lbs (Grand Festive Tier)']);
             populateDropdownOpts('select-flavor', bake.flavors, ['Belgian Chocolate Fudge', 'Silk Route Salted Caramel', 'Lotus Biscoff Crunch']);
+
             if(cachedUserSession && !cachedUserSession.isAdmin && !cachedUserSession.isAnonymousGuest) {
-                document.getElementById('order-recipient-name').value = cachedUserSession.fullName || ''; document.getElementById('order-contact-number').value = cachedUserSession.savedPhone || ''; document.getElementById('order-address').value = cachedUserSession.savedAddress || '';
+                document.getElementById('order-recipient-name').value = cachedUserSession.fullName || '';
+                document.getElementById('order-contact-number').value = cachedUserSession.savedPhone || '';
+                document.getElementById('order-address').value = cachedUserSession.savedAddress || '';
             } else {
-                document.getElementById('order-recipient-name').value = ''; document.getElementById('order-contact-number').value = ''; document.getElementById('order-address').value = '';
+                document.getElementById('order-recipient-name').value = '';
+                document.getElementById('order-contact-number').value = '';
+                document.getElementById('order-address').value = '';
             }
-            document.getElementById('checkout-submit-btn').disabled = false; document.getElementById('checkout-submit-btn').innerText = "Confirm Order Reservation";
+            
+            document.getElementById('checkout-submit-btn').disabled = false;
+            document.getElementById('checkout-submit-btn').innerText = "Confirm Order Reservation";
             document.getElementById('product-modal').classList.remove('hidden');
         }
 
-        window.closeModal = function() { document.getElementById('product-modal').classList.add('hidden'); document.getElementById('receipt-modal').classList.add('hidden'); };
+        window.closeModal = function() {
+            document.getElementById('product-modal').classList.add('hidden');
+            document.getElementById('receipt-modal').classList.add('hidden');
+        };
+
         function populateDropdownOpts(id, arr, fallbacks) {
-            const el = document.getElementById(id); el.innerHTML = ''; const opts = (arr && arr.length > 0) ? arr : fallbacks;
-            opts.forEach(o => { const opt = document.createElement('option'); opt.value = o; opt.innerText = o; el.appendChild(opt); });
+            const el = document.getElementById(id); el.innerHTML = '';
+            const opts = (arr && arr.length > 0) ? arr : fallbacks;
+            opts.forEach(o => {
+                const opt = document.createElement('option');
+                opt.value = o; opt.innerText = o; el.appendChild(opt);
+            });
         }
 
-        // --- Ticket Processing Framework ---
+        // --- Ticket Processing & Optimization Handshake Pipelines ---
         window.submitOrderPipeline = async function() {
-            const dateIn = document.getElementById('order-delivery-date').value, nameIn = document.getElementById('order-recipient-name').value.trim(), phoneIn = document.getElementById('order-contact-number').value.trim(), addrIn = document.getElementById('order-address').value.trim(), submitBtn = document.getElementById('checkout-submit-btn');
-            if(!dateIn || !nameIn || !phoneIn || !addrIn) { triggerNotificationToast("Complete required delivery variables."); return; }
+            const dateIn = document.getElementById('order-delivery-date').value;
+            const nameIn = document.getElementById('order-recipient-name').value.trim();
+            const phoneIn = document.getElementById('order-contact-number').value.trim();
+            const addrIn = document.getElementById('order-address').value.trim();
+            const submitBtn = document.getElementById('checkout-submit-btn');
 
-            submitBtn.disabled = true; submitBtn.innerText = "Securing Booking Tiers...";
-            const timeObj = new Date(), d = String(timeObj.getDate()).padStart(2, '0'), m = String(timeObj.getMonth() + 1).padStart(2, '0'), y = String(timeObj.getFullYear()).slice(-2), datePrefix = `${d}${m}${y}`; 
+            if(!dateIn || !nameIn || !phoneIn || !addrIn) {
+                triggerNotificationToast("Complete all required coordinate delivery parameters.");
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Securing Booking Order Tiers...";
+
+            const timeObj = new Date();
+            const d = String(timeObj.getDate()).padStart(2, '0');
+            const m = String(timeObj.getMonth() + 1).padStart(2, '0');
+            const y = String(timeObj.getFullYear()).slice(-2);
+            const datePrefix = `${d}${m}${y}`; 
 
             let uniqueSequenceCode = "001";
-            try { uniqueSequenceCode = String((await client.fetch(`count(*[_type == "order" && ticketId match $prefix])`, { prefix: `${datePrefix}*` })) + 1).padStart(3, '0'); } catch(e) {}
-            const ticketId = `${datePrefix}${uniqueSequenceCode}`; newlyGeneratedTicketCache = ticketId;
-            const selectedWeight = document.getElementById('select-weight').value, selectedFlavor = document.getElementById('select-flavor').value;
+            try {
+                const matchCount = await client.fetch(`count(*[_type == "order" && ticketId match $prefix])`, { prefix: `${datePrefix}*` });
+                uniqueSequenceCode = String(matchCount + 1).padStart(3, '0');
+            } catch(err) {
+                console.warn(err);
+            }
+
+            const ticketId = `${datePrefix}${uniqueSequenceCode}`;
+            newlyGeneratedTicketCache = ticketId;
+
+            const selectedWeight = document.getElementById('select-weight').value;
+            const selectedFlavor = document.getElementById('select-flavor').value;
 
             try {
-                await client.create({ _type: 'order', ticketId: ticketId, customerName: nameIn, usernameRef: (cachedUserSession && !cachedUserSession.isAdmin && !cachedUserSession.isAnonymousGuest) ? cachedUserSession.username : 'Guest', cakeTitle: activeProductContext.title, weight: selectedWeight, flavor: selectedFlavor, deliveryDate: dateIn, deliveryAddress: addrIn, contactNumber: phoneIn, status: 'Pending Payment Verification' });
+                await client.create({
+                    _type: 'order',
+                    ticketId: ticketId,
+                    customerName: nameIn,
+                    usernameRef: (cachedUserSession && !cachedUserSession.isAdmin && !cachedUserSession.isAnonymousGuest) ? cachedUserSession.username : 'Guest',
+                    cakeTitle: activeProductContext.title,
+                    weight: selectedWeight,
+                    flavor: selectedFlavor,
+                    deliveryDate: dateIn,
+                    deliveryAddress: addrIn,
+                    contactNumber: phoneIn,
+                    status: 'Pending Payment Verification'
+                });
+                
                 if(!cachedUserSession || cachedUserSession.isAnonymousGuest) {
-                    let localTickets = (cachedUserSession && cachedUserSession.guestTickets) ? cachedUserSession.guestTickets : [];
-                    if(!localTickets.includes(ticketId)) localTickets.push(ticketId);
-                    cachedUserSession = { username: 'guest_pass', fullName: 'Guest Tracker Pass', isAnonymousGuest: true, guestTickets: localTickets };
+                    let localTickets = [];
+                    if(cachedUserSession && cachedUserSession.guestTickets) {
+                        localTickets = cachedUserSession.guestTickets;
+                    }
+                    if(!localTickets.includes(ticketId)) {
+                        localTickets.push(ticketId);
+                    }
+                    cachedUserSession = {
+                        username: 'guest_pass',
+                        fullName: 'Guest Order Tracker',
+                        isAnonymousGuest: true,
+                        guestTickets: localTickets
+                    };
                     localStorage.setItem('studio_session', JSON.stringify(cachedUserSession));
                 }
-                document.getElementById('invoice-cake-title').innerText = activeProductContext.title; document.getElementById('invoice-cake-weight').innerText = selectedWeight; document.getElementById('invoice-cake-flavor').innerText = selectedFlavor; document.getElementById('invoice-cake-price').innerText = activeProductContext.basePrice ? `PKR ${Number(activeProductContext.basePrice).toLocaleString()}` : 'Custom Inquire';
-                document.getElementById('product-modal').classList.add('hidden'); document.getElementById('receipt-ticket-label').innerText = ticketId; document.getElementById('receipt-modal').classList.remove('hidden');
-                executeSessionUIRendering(); triggerNotificationToast("Booking allocation locked.");
-            } catch(e) { triggerNotificationToast("Cloud vault handshake runtime failure."); submitBtn.disabled = false; submitBtn.innerText = "Confirm Order Reservation"; }
+
+                document.getElementById('invoice-cake-title').innerText = activeProductContext.title;
+                document.getElementById('invoice-cake-weight').innerText = selectedWeight;
+                document.getElementById('invoice-cake-flavor').innerText = selectedFlavor;
+                document.getElementById('invoice-cake-price').innerText = activeProductContext.basePrice ? `PKR ${Number(activeProductContext.basePrice).toLocaleString()}` : 'Custom Inquire';
+
+                document.getElementById('product-modal').classList.add('hidden');
+                document.getElementById('receipt-ticket-label').innerText = ticketId;
+                document.getElementById('receipt-modal').classList.remove('hidden');
+                
+                executeSessionUIRendering();
+                triggerNotificationToast("Atelier booking reservation allocated.");
+            } catch(e) {
+                triggerNotificationToast("Vault submission error.");
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Confirm Order Reservation";
+            }
         };
 
         window.dispatchWhatsAppReceipt = function() {
-            let msg = `🏛️ *THE BAKING STUDIO ATELIER RECEIPTS*\n=====================================\n\n🎟️ *Order Ticket ID:* ${newlyGeneratedTicketCache}\n🎂 *Cake Foundation:* ${activeProductContext.title}\nScale Weight: ${document.getElementById('select-weight').value}\nSelected Flavor: ${document.getElementById('select-flavor').value}\n\n=====================================\n💼 *Payment Protocol:* JazzCash to 03001311047\n\n_Attaching verification screenshot string layout down underneath:_`;
-            window.open(`https://wa.me/923001311047?text=${encodeURIComponent(msg)}`, '_blank'); window.closeModal();
+            const size = document.getElementById('select-weight').value;
+            const flavor = document.getElementById('select-flavor').value;
+            
+            let msg = `🏛️ *THE BAKING STUDIO ATELIER RECEIPTS*\n`;
+            msg += `=====================================\n\n`;
+            msg += `🎟️ *Order Ticket ID:* ${newlyGeneratedTicketCache}\n`;
+            msg += `🎂 *Cake Foundation:* ${activeProductContext.title}\n`;
+            msg += `Scale Weight: ${size}\n`;
+            msg += `Selected Flavor: ${flavor}\n\n`;
+            msg += `=====================================\n`;
+            msg += `💼 *Payment Retailing Protocol:* JazzCash to 03001311047\n\n`;
+            msg += `_Attaching transaction verification snapshot status image below:_`;
+
+            window.open(`https://wa.me/923001311047?text=${encodeURIComponent(msg)}`, '_blank');
+            window.closeModal();
         };
 
-        // --- Administrative Management Control Blocks ---
+        // --- Administrative Management Luxury Card Grid Logic Operations ---
         async function loadAdminDashboard(isBackgroundSync = false, isInitialBootLoad = false) {
-            const cardsContainer = document.getElementById('admin-cards-container'), spinIndicator = document.getElementById('admin-refresh-indicator');
-            if(isBackgroundSync) spinIndicator.style.opacity = '1'; else cardsContainer.innerHTML = `<div class="col-span-full text-center text-xs tracking-widest text-gray-400 animate-pulse py-12">Synchronizing live workspace logs...</div>`;
+            const cardsContainer = document.getElementById('admin-cards-container');
+            const spinIndicator = document.getElementById('admin-refresh-indicator');
+
+            if(isBackgroundSync) {
+                spinIndicator.style.opacity = '1';
+            } else {
+                cardsContainer.innerHTML = `<div class="col-span-full text-center text-xs tracking-widest text-gray-400 animate-pulse py-12">Synchronizing live cloud logs...</div>`;
+            }
 
             try {
-                const logs = await client.fetch(`*[_type == "order"] | order(_createdAt desc)`); cardsContainer.innerHTML = '';
-                if(!logs || logs.length === 0) { cardsContainer.innerHTML = `<div class="col-span-full py-12 text-center text-xs italic text-gray-400 bg-white border rounded-2xl border-dashed">No active bookings registered in database ecosystem.</div>`; return; }
-                if (isInitialBootLoad) existingTicketsRegistryCache = logs.map(l => l.ticketId);
+                const logs = await client.fetch(`*[_type == "order"] | order(_createdAt desc)`);
+                cardsContainer.innerHTML = '';
+
+                if(!logs || logs.length === 0) {
+                    cardsContainer.innerHTML = `<div class="col-span-full py-12 text-center text-xs italic text-gray-400 bg-white border rounded-2xl border-dashed">No active bookings registered in database ecosystem.</div>`;
+                    return;
+                }
+
+                if (isInitialBootLoad) {
+                    existingTicketsRegistryCache = logs.map(l => l.ticketId);
+                }
 
                 logs.forEach(log => {
-                    const card = document.createElement('div'), isNewlyInjectedNode = !isInitialBootLoad && !existingTicketsRegistryCache.includes(log.ticketId);
+                    const card = document.createElement('div');
+                    const isNewlyInjectedNode = !isInitialBootLoad && !existingTicketsRegistryCache.includes(log.ticketId);
+                    
                     card.className = `bg-white border rounded-2xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between gap-4 border-roseGold-100/70 relative overflow-hidden group ${isNewlyInjectedNode ? 'new-order-highlight' : ''}`;
                     card.id = `admin-card-${log._id}`;
+
                     let badgeClass = "bg-amber-50 text-amber-700 border-amber-200/80";
                     if(log.status === 'Payment Confirmed') badgeClass = "bg-blue-50 text-blue-700 border-blue-200/80";
                     if(log.status === 'Baking In Progress') badgeClass = "bg-purple-50 text-purple-700 border-purple-200/80";
                     if(log.status === 'Declined/Refunded') badgeClass = "bg-red-50 text-red-700 border-red-200/80";
 
-                    card.innerHTML = `<div class="flex justify-between items-start border-b border-roseGold-100/50 pb-3"><div><span class="text-[9px] uppercase tracking-wider font-bold text-gray-400 block">Ticket Code</span><div class="font-mono text-sm font-bold text-charcoal-900 group-hover:text-roseGold-700 transition-colors">#${log.ticketId}</div></div><span class="px-2.5 py-0.5 border text-[9px] font-semibold rounded-full uppercase tracking-wide ${badgeClass}">${log.status}</span></div><div class="space-y-2 text-xs flex-grow"><div><span class="text-[9px] uppercase font-bold text-gray-400 block">Bake Details</span><div class="font-semibold text-charcoal-900 text-sm">${log.cakeTitle}</div><div class="text-gray-500 text-[10px] mt-0.5">${log.weight} / ${log.flavor}</div></div><div class="pt-1"><span class="text-[9px] uppercase font-bold text-gray-400 block">Client Identity</span><div class="font-medium text-charcoal-800">${log.customerName}</div><div class="text-[10px] text-gray-400 font-mono">${log.contactNumber}</div></div></div><div class="bg-cream-50 rounded-xl p-2.5 flex items-center justify-between text-[10px] text-gray-500 border border-roseGold-100/40"><span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3.5 h-3.5 text-roseGold-500"></i> Due Date:</span><strong class="text-charcoal-900 font-semibold">${log.deliveryDate}</strong></div>`;
-                    card.onclick = () => openInspectModal(log); cardsContainer.appendChild(card);
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start border-b border-roseGold-100/50 pb-3">
+                            <div>
+                                <span class="text-[9px] uppercase tracking-wider font-bold text-gray-400 block">Ticket Code</span>
+                                <div class="font-mono text-sm font-bold text-charcoal-900 group-hover:text-roseGold-700 transition-colors">#${log.ticketId}</div>
+                            </div>
+                            <span class="px-2.5 py-0.5 border text-[9px] font-semibold rounded-full uppercase tracking-wide ${badgeClass}">
+                                ${log.status}
+                            </span>
+                        </div>
+
+                        <div class="space-y-2 text-xs flex-grow">
+                            <div>
+                                <span class="text-[9px] uppercase font-bold text-gray-400 block">Bake Details</span>
+                                <div class="font-semibold text-charcoal-900 text-sm">${log.cakeTitle}</div>
+                                <div class="text-gray-500 text-[10px] mt-0.5">${log.weight} / ${log.flavor}</div>
+                            </div>
+                            <div class="pt-1">
+                                <span class="text-[9px] uppercase font-bold text-gray-400 block">Client Identity</span>
+                                <div class="font-medium text-charcoal-800">${log.customerName}</div>
+                                <div class="text-[10px] text-gray-400 font-mono">${log.contactNumber}</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-cream-50 rounded-xl p-2.5 flex items-center justify-between text-[10px] text-gray-500 border border-roseGold-100/40">
+                            <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3.5 h-3.5 text-roseGold-500"></i> Due Date:</span>
+                            <strong class="text-charcoal-900 font-semibold">${log.deliveryDate}</strong>
+                        </div>
+                    `;
+                    
+                    card.onclick = () => openInspectModal(log);
+                    cardsContainer.appendChild(card);
                 });
                 lucide.createIcons();
-            } catch(err) { cardsContainer.innerHTML = `<div class="col-span-full py-12 text-center text-xs font-semibold text-red-700">Console processing synchronizing error.</div>`; }
-            finally { spinIndicator.style.opacity = '0'; }
+            } catch(err) {
+                cardsContainer.innerHTML = `<div class="col-span-full py-12 text-center text-xs font-semibold text-red-700">Console synchronization failure.</div>`;
+            } finally {
+                spinIndicator.style.opacity = '0';
+            }
         }
 
+        // --- Deep Admin Inspect Overlay Modal Function Management ---
         window.openInspectModal = function(log) {
             const modal = document.getElementById('admin-inspect-modal');
-            document.getElementById('inspect-ticket-badge').innerText = `#${log.ticketId}`; document.getElementById('inspect-name').innerText = log.customerName; document.getElementById('inspect-phone').innerText = log.contactNumber; document.getElementById('inspect-username').innerText = log.usernameRef || 'Guest'; document.getElementById('inspect-cake').innerText = log.cakeTitle; document.getElementById('inspect-weight').innerText = log.weight; document.getElementById('inspect-flavor').innerText = log.flavor; document.getElementById('inspect-date').innerText = log.deliveryDate; document.getElementById('inspect-address').innerText = log.deliveryAddress;
+            
+            document.getElementById('inspect-ticket-badge').innerText = `#${log.ticketId}`;
+            document.getElementById('inspect-name').innerText = log.customerName;
+            document.getElementById('inspect-phone').innerText = log.contactNumber;
+            document.getElementById('inspect-username').innerText = log.usernameRef || 'Guest';
+            document.getElementById('inspect-cake').innerText = log.cakeTitle;
+            document.getElementById('inspect-weight').innerText = log.weight;
+            document.getElementById('inspect-flavor').innerText = log.flavor;
+            document.getElementById('inspect-date').innerText = log.deliveryDate;
+            document.getElementById('inspect-address').innerText = log.deliveryAddress;
+
             document.getElementById('inspect-btn-approve').onclick = () => { window.updateOrderStatus(log._id, 'Payment Confirmed'); window.closeInspectModal(); };
             document.getElementById('inspect-btn-bake').onclick = () => { window.updateOrderStatus(log._id, 'Baking In Progress'); window.closeInspectModal(); };
             document.getElementById('inspect-btn-cancel').onclick = () => { window.updateOrderStatus(log._id, 'Declined/Refunded'); window.closeInspectModal(); };
-            modal.classList.remove('hidden'); lucide.createIcons();
-        };
-        window.closeInspectModal = function() { document.getElementById('admin-inspect-modal').classList.add('hidden'); };
 
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        };
+
+        window.closeInspectModal = function() {
+            document.getElementById('admin-inspect-modal').classList.add('hidden');
+        };
+
+        // Live Real-Time Web-Socket Stream subscription integration catching fresh incoming database uploads instantly
         function setupLiveAdminStream() {
-            if(adminSubscriptionHook) return;
-            adminSubscriptionHook = client.listen(`*[_type == "order"]`).subscribe({
+            if(adminSubscriptionHook) return; 
+
+            const queryFilter = `*[_type == "order"]`;
+            adminSubscriptionHook = client.listen(queryFilter).subscribe({
                 next: (mutation) => {
                     if(mutation.transition === 'appear' && mutation.result) {
                         const newDoc = mutation.result;
-                        if(!existingTicketsRegistryCache.includes(newDoc.ticketId)) { triggerLivePushAudioAlert(); triggerNotificationOverlayBanner(newDoc.ticketId, newDoc.customerName); existingTicketsRegistryCache.push(newDoc.ticketId); }
+                        if(!existingTicketsRegistryCache.includes(newDoc.ticketId)) {
+                            triggerLivePushAudioAlert();
+                            triggerNotificationOverlayBanner(newDoc.ticketId, newDoc.customerName);
+                            existingTicketsRegistryCache.push(newDoc.ticketId);
+                        }
                     }
                     loadAdminDashboard(true, false); 
                 },
-                error: (err) => console.error(err)
+                error: (err) => console.error("Real-time pipeline socket error exception:", err)
             });
         }
 
         window.updateOrderStatus = async function(id, status) {
-            try { await client.patch(id).set({ status }).commit(); triggerNotificationToast(`Order Status Mutated.`); loadAdminDashboard(true, false); } catch(e) { triggerNotificationToast("Status manipulation failure."); }
+            try {
+                await client.patch(id).set({ status }).commit();
+                triggerNotificationToast(`Order Tracking Status Mutated.`);
+                loadAdminDashboard(true, false); 
+            } catch(e) {
+                triggerNotificationToast("Failed status change updates.");
+            }
         };
 
         function triggerLivePushAudioAlert() {
             try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)(), osc1 = ctx.createOscillator(), gain1 = ctx.createGain();
-                osc1.type = 'sine'; osc1.frequency.setValueAtTime(523.25, ctx.currentTime); gain1.gain.setValueAtTime(0.15, ctx.currentTime); gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
-                osc1.connect(gain1); gain1.connect(ctx.destination); osc1.start(); osc1.stop(ctx.currentTime + 0.4);
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc1 = ctx.createOscillator();
+                const gain1 = ctx.createGain();
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(523.25, ctx.currentTime); 
+                gain1.gain.setValueAtTime(0.15, ctx.currentTime);
+                gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+                osc1.connect(gain1);
+                gain1.connect(ctx.destination);
+                osc1.start();
+                osc1.stop(ctx.currentTime + 0.4);
+
                 setTimeout(() => {
-                    const osc2 = ctx.createOscillator(), gain2 = ctx.createGain();
-                    osc2.type = 'sine'; osc2.frequency.setValueAtTime(659.25, ctx.currentTime); gain2.gain.setValueAtTime(0.15, ctx.currentTime); gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
-                    osc2.connect(gain2); gain2.connect(ctx.destination); osc2.start(); osc2.stop(ctx.currentTime + 0.5);
+                    const osc2 = ctx.createOscillator();
+                    const gain2 = ctx.createGain();
+                    osc2.type = 'sine';
+                    osc2.frequency.setValueAtTime(659.25, ctx.currentTime); 
+                    gain2.gain.setValueAtTime(0.15, ctx.currentTime);
+                    gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+                    osc2.connect(gain2);
+                    gain2.connect(ctx.destination);
+                    osc2.start();
+                    osc2.stop(ctx.currentTime + 0.5);
                 }, 150);
-            } catch(e) {}
+            } catch(e) {
+                console.warn("Audio Context pipeline blocked", e);
+            }
         }
 
         function triggerNotificationOverlayBanner(ticketId, customerName) {
-            const banner = document.getElementById('live-notification-banner'); document.getElementById('live-notification-text').innerText = `Ticket #${ticketId} registered by ${customerName}`;
-            banner.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-50px]'); banner.classList.add('opacity-100', 'translate-y-0');
-            setTimeout(() => { window.closeNotificationBanner(); }, 6000);
+            const banner = document.getElementById('live-notification-banner');
+            document.getElementById('live-notification-text').innerText = `Ticket #${ticketId} registered by ${customerName}`;
+            
+            banner.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-50px]');
+            banner.classList.add('opacity-100', 'translate-y-0');
+            
+            setTimeout(() => {
+                window.closeNotificationBanner();
+            }, 6000);
         }
-        window.closeNotificationBanner = function() { const banner = document.getElementById('live-notification-banner'); banner.classList.add('opacity-0', 'translate-y-[-50px]', 'pointer-events-none'); banner.classList.remove('opacity-100', 'translate-y-0'); };
-        function triggerNotificationToast(message) { const toast = document.getElementById('global-toast'); toast.innerText = message; toast.style.opacity = '1'; toast.style.transform = 'translateY(0)'; setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateY(10px)'; }, 3000); }
+
+        window.closeNotificationBanner = function() {
+            const banner = document.getElementById('live-notification-banner');
+            banner.classList.add('opacity-0', 'translate-y-[-50px]', 'pointer-events-none');
+            banner.classList.remove('opacity-100', 'translate-y-0');
+        };
+
+        function triggerNotificationToast(message) {
+            const toast = document.getElementById('global-toast');
+            toast.innerText = message;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateY(0)';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+            }, 3000);
+        }
     </script>
 </body>
 </html>
