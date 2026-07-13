@@ -1,11 +1,13 @@
 {
   "short_name": "BakingStudio",
   "name": "The Baking Studio Ateliers",
+  "description": "Premium Custom Confectionery Commissions Boutique Portal.",
   "icons": [
     {
       "src": "https://cdn.sanity.io/images/t7g7grwf/production/bf5e59247653bbd742617a2267232230a845fe9b-256x256.png",
       "type": "image/png",
-      "sizes": "256x256"
+      "sizes": "192x192",
+      "purpose": "any"
     },
     {
       "src": "https://cdn.sanity.io/images/t7g7grwf/production/bf5e59247653bbd742617a2267232230a845fe9b-256x256.png",
@@ -18,5 +20,6 @@
   "background_color": "#FDFCF7",
   "theme_color": "#171717",
   "display": "standalone",
-  "orientation": "portrait"
+  "orientation": "portrait",
+  "prefer_related_applications": false
 }

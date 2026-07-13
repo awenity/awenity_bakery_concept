@@ -25,9 +25,8 @@
             }
         }
     </script>
-    
     <!-- Google Fonts & Lucide Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght=0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <!-- OneSignal Web Push SDK CDN Integration -->
@@ -36,10 +35,11 @@
         window.OneSignalDeferred = window.OneSignalDeferred || [];
         OneSignalDeferred.push(async function(OneSignal) {
             await OneSignal.init({
-                appId: "YOUR-ONESIGNAL-APP-ID", 
-                safari_web_id: "YOUR-SAFARI-WEB-ID", 
+                appId: "YOUR-ONESIGNAL-APP-ID", // 👈 Replace with your OneSignal web app ID token key string
                 allowLocalhostAsSecureContext: true
             });
+            // Automatically prompts the user for push notifications once the page initializes
+            OneSignal.Notifications.requestPermission();
         });
     </script>
 
@@ -103,7 +103,7 @@
             </section>
         </div>
 
-        <!-- High-End Administrative Dashboard Order Card Grid Component -->
+        <!-- Administrative Dashboard View Component -->
         <div id="admin-view-pane" class="hidden space-y-8">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-roseGold-200 pb-6">
                 <div>
@@ -185,7 +185,7 @@
         </div>
     </div>
 
-    <!-- Enhanced Invoice Verification & Payment Receipt Modal -->
+    <!-- Enhanced Invoice Verification Modal -->
     <div id="receipt-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/60 backdrop-blur-md hidden">
         <div class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl border border-roseGold-200 p-6 text-center space-y-4 max-h-[95vh] overflow-y-auto">
             <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-sm">
@@ -324,6 +324,18 @@
             </div>
             
             <div class="space-y-3 text-xs">
+                <!-- Native PWA Installation Hook Controller Element -->
+                <div id="pwa-install-banner-block" class="hidden bg-gradient-to-br from-cream-100 to-roseGold-50 border border-roseGold-300 p-4 rounded-xl flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-2.5 text-left">
+                        <i data-lucide="smartphone" class="w-5 h-5 text-roseGold-600 flex-shrink-0"></i>
+                        <div>
+                            <span class="font-bold block text-charcoal-900 text-[11px]">Install Studio Application</span>
+                            <span class="text-gray-500 text-[10px]">Add this boutique catalog system right to your home screen.</span>
+                        </div>
+                    </div>
+                    <button id="pwa-native-install-btn" class="bg-charcoal-900 hover:bg-roseGold-700 text-white px-4 py-2 rounded-lg font-bold tracking-wider uppercase text-[10px] shadow-sm transition-colors flex-shrink-0">Install</button>
+                </div>
+
                 <div id="auth-main-inputs">
                     <div>
                         <label class="block font-bold text-gray-500 mb-1">Account Username</label>
@@ -411,12 +423,38 @@
         let newlyGeneratedTicketCache = "";
         let adminSubscriptionHook = null;
         let existingTicketsRegistryCache = []; 
+        let interceptedPWAInstallPrompt = null; // Installs deferred installation triggers cleanly
 
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             loadEditorialMenu();
             checkLocalSessionState();
+            setupPWABeforeInstallListener(); // Setup custom system install captures immediately
         });
+
+        // --- PWA Custom App Installation Intercept Logic Loops ---
+        function setupPWABeforeInstallListener() {
+            window.addEventListener('beforeinstallprompt', (e) => {
+                // Prevent standard immediate browser prompt execution configurations
+                e.preventDefault();
+                interceptedPWAInstallPrompt = e;
+                
+                // Expose our hidden luxury system installation element
+                const banner = document.getElementById('pwa-install-banner-block');
+                if (banner) {
+                    banner.classList.remove('hidden');
+                }
+
+                document.getElementById('pwa-native-install-btn').onclick = async () => {
+                    if (!interceptedPWAInstallPrompt) return;
+                    banner.classList.add('hidden');
+                    interceptedPWAInstallPrompt.prompt(); // Show browser overlay
+                    const result = await interceptedPWAInstallPrompt.userChoice;
+                    console.log(`User interaction results state resolution: ${result.outcome}`);
+                    interceptedPWAInstallPrompt = null;
+                };
+            });
+        }
 
         // --- Profile Account Control Settings System Functions ---
         window.toggleSettingsModal = function() {
@@ -991,7 +1029,7 @@
             }
         }
 
-        // --- Deep Admin Inspect Overlay Modal Function Management Loops ---
+        // --- Admin Inspect Overlay Modal Function Management ---
         window.openInspectModal = function(log) {
             const modal = document.getElementById('admin-inspect-modal');
             
